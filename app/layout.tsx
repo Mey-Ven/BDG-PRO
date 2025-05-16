@@ -1,5 +1,7 @@
 import type React from "react"
 import "@/styles/globals.css"
+import "@/styles/layout.css"
+import "@/styles/auto-scroll.css"
 import { Inter } from "next/font/google"
 import type { Metadata } from "next"
 import { ThemeProvider } from "@/components/theme-provider"

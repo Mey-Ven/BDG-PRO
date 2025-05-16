@@ -24,6 +24,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import { useTheme } from "next-themes"
 
 export default function LandingPage() {
@@ -105,10 +106,16 @@ export default function LandingPage() {
       >
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2 font-bold">
-            <div className="size-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground">
-              S
+            <div className="size-8 rounded-lg flex items-center justify-center overflow-hidden">
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={34}
+                height={34}
+                className="w-full h-full object-cover"
+              />
             </div>
-            <span>SaaSify</span>
+            <span>BRIS DE GLACE</span>
           </div>
           <nav className="hidden md:flex gap-8">
             <Link
@@ -140,7 +147,7 @@ export default function LandingPage() {
             <Link
               href="#"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-              Log in
+              Devenir Partenaire
             </Link>
             <Button className="rounded-full">
               Get Started
@@ -193,52 +200,75 @@ export default function LandingPage() {
       </header>
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="w-full py-20 md:py-32 lg:py-40 overflow-hidden">
-          <div className="container px-4 md:px-6 relative">
-            <div className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
+        <section className="w-full min-h-screen flex items-center overflow-hidden relative pt-16 md:pt-0">
+          {/* Background Image with Overlay */}
+          <div className="absolute inset-0 -z-20">
+            <Image
+              src="/Pbr.jpg"
+              alt="Hero Background"
+              fill
+              priority
+              sizes="100vw"
+              quality={90}
+              className="object-cover object-center"
+            />
+          </div>
+
+          {/* Dark Overlay with Gradient */}
+          <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background/95 via-background/80 to-background/95 dark:from-background/95 dark:via-background/90 dark:to-background/95"></div>
+
+          {/* Grid Pattern Overlay */}
+          <div className="absolute inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30 dark:opacity-20"></div>
+
+          <div className="container px-4 md:px-6 relative py-8">
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="text-center max-w-3xl mx-auto mb-12"
-            >
-              <Badge className="mb-4 rounded-full px-4 py-1.5 text-sm font-medium" variant="secondary">
-                Launching Soon
-              </Badge>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
-                Elevate Your Workflow with SaaSify
+              className="text-center max-w-3xl mx-auto backdrop-blur-sm bg-background/30 dark:bg-background/40 p-6 sm:p-8 rounded-xl shadow-lg border border-white/10 dark:border-white/5 rectangle-1">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 text-foreground drop-shadow-md">
+                Remplacez votre pare-brise gratuitement, rapidement et sans stress !
               </h1>
-              <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                The all-in-one platform that helps teams collaborate, automate, and deliver exceptional results.
-                Streamline your processes and focus on what matters most.
+              <p className="text-lg md:text-xl text-foreground/90 dark:text-foreground/90 mb-8 max-w-2xl mx-auto drop-shadow-sm sous-ttr">
+                Nous prenons en charge toutes les démarches avec votre assurance. Intervention rapide, zéro avance de frais, et un service client disponible 7j/7.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="rounded-full h-12 px-8 text-base">
+                <Button size="lg" className="rounded-full h-12 px-8 text-base shadow-md font-medium">
                   Start Free Trial
                   <ArrowRight className="ml-2 size-4" />
                 </Button>
-                <Button size="lg" variant="outline" className="rounded-full h-12 px-8 text-base">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="rounded-full h-12 px-8 text-base bg-background/50 backdrop-blur-sm border-white/20 shadow-md hover:bg-background/70 text-foreground dark:text-foreground font-medium"
+                >
                   Book a Demo
                 </Button>
               </div>
-              <div className="flex items-center justify-center gap-4 mt-6 text-sm text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <Check className="size-4 text-primary" />
-                  <span>No credit card</span>
+              <div className="flex flex-wrap items-center justify-center gap-4 mt-6 text-sm text-foreground/90 dark:text-foreground/90">
+                <div className="flex items-center gap-1.5">
+                  <div className="bg-primary/20 dark:bg-primary/30 rounded-full p-0.5">
+                    <Check className="size-3.5 text-primary" />
+                  </div>
+                  <span className="font-medium">No credit card</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Check className="size-4 text-primary" />
-                  <span>14-day trial</span>
+                <div className="flex items-center gap-1.5">
+                  <div className="bg-primary/20 dark:bg-primary/30 rounded-full p-0.5">
+                    <Check className="size-3.5 text-primary" />
+                  </div>
+                  <span className="font-medium">14-day trial</span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <Check className="size-4 text-primary" />
-                  <span>Cancel anytime</span>
+                <div className="flex items-center gap-1.5">
+                  <div className="bg-primary/20 dark:bg-primary/30 rounded-full p-0.5">
+                    <Check className="size-3.5 text-primary" />
+                  </div>
+                  <span className="font-medium">Cancel anytime</span>
                 </div>
               </div>
             </motion.div>
 
-            <motion.div
+{/*            <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
@@ -257,27 +287,519 @@ export default function LandingPage() {
               </div>
               <div className="absolute -bottom-6 -right-6 -z-10 h-[300px] w-[300px] rounded-full bg-gradient-to-br from-primary/30 to-secondary/30 blur-3xl opacity-70"></div>
               <div className="absolute -top-6 -left-6 -z-10 h-[300px] w-[300px] rounded-full bg-gradient-to-br from-secondary/30 to-primary/30 blur-3xl opacity-70"></div>
-            </motion.div>
+            </motion.div> */}
           </div>
         </section>
 
         {/* Logos Section */}
         <section className="w-full py-12 border-y bg-muted/30">
           <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <p className="text-sm font-medium text-muted-foreground">Trusted by innovative companies worldwide</p>
-              <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12 lg:gap-16">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Image
-                    key={i}
-                    src={`/placeholder-logo.svg`}
-                    alt={`Company logo ${i}`}
-                    width={120}
-                    height={60}
-                    className="h-8 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
-                  />
-                ))}
+            <div className="flex flex-col items-center justify-center space-y-6 text-center">
+              <div className="auto-scroll-container w-full max-w-6xl mx-auto">
+                <div className="auto-scroll-content">
+                  {/* First set of logos */}
+                  <div className="auto-scroll-item flex items-center gap-8 md:gap-12 lg:gap-16 px-4">
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/215qHZGc7EzIafdHB5MciT/bbef49e5967b249b2e01be80a828d684/allianz.png"
+                      alt="Allianz"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/1ygxiGg6eWEOigywuMzXpD/16649cf7d620cd8dcae716b4f1c04c61/lesfurets-assurance.png"
+                      alt="Les Furets Assurance"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/6ifTaYrff8B3vIObBRq3zi/20a17dd2546b2aecc7135b0e79512bdd/acommeassure.png"
+                      alt="A Comme Assure"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/2706V8Z5TSwwfPVsdq0meq/d1a1b8e3e24e72fc52e0dd013e1574a1/active-assurances.png"
+                      alt="Active Assurances"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/Y1Y90frEngKCco3XRmpuo/9a733abe05b4a440986582f881ba7944/aon.png"
+                      alt="AON"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/9x5lRd2SdX94TZAOvGklA/7d4832ca678ca77713a3b9ac9e549d9f/areas.png"
+                      alt="Areas"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/58rb7BnDz38ausmhKe0cfN/ad32fecd11ff725e2f3d999e621928da/assu2000.png"
+                      alt="Assu 2000"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/4AHYXYIUKINriNLr5D9dY0/aa83d7a4b09824e1e8af37e6cb5a602e/assudika.png"
+                      alt="Assudika"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/6QuuKP2WHMCTjORNAvpq7Y/24d98e10f0a98392e4b86964c14be44d/assureo.png"
+                      alt="Assureo"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                  </div>
+
+                  {/* Duplicate the logos to create a seamless loop */}
+                  <div className="auto-scroll-item flex items-center gap-8 md:gap-12 lg:gap-16 px-4">
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/215qHZGc7EzIafdHB5MciT/bbef49e5967b249b2e01be80a828d684/allianz.png"
+                      alt="Allianz"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/1ygxiGg6eWEOigywuMzXpD/16649cf7d620cd8dcae716b4f1c04c61/lesfurets-assurance.png"
+                      alt="Les Furets Assurance"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/6ifTaYrff8B3vIObBRq3zi/20a17dd2546b2aecc7135b0e79512bdd/acommeassure.png"
+                      alt="A Comme Assure"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/2706V8Z5TSwwfPVsdq0meq/d1a1b8e3e24e72fc52e0dd013e1574a1/active-assurances.png"
+                      alt="Active Assurances"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/Y1Y90frEngKCco3XRmpuo/9a733abe05b4a440986582f881ba7944/aon.png"
+                      alt="AON"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/9x5lRd2SdX94TZAOvGklA/7d4832ca678ca77713a3b9ac9e549d9f/areas.png"
+                      alt="Areas"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/58rb7BnDz38ausmhKe0cfN/ad32fecd11ff725e2f3d999e621928da/assu2000.png"
+                      alt="Assu 2000"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/4AHYXYIUKINriNLr5D9dY0/aa83d7a4b09824e1e8af37e6cb5a602e/assudika.png"
+                      alt="Assudika"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/6QuuKP2WHMCTjORNAvpq7Y/24d98e10f0a98392e4b86964c14be44d/assureo.png"
+                      alt="Assureo"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                  </div>
+                </div>
               </div>
+
+              {/* Second row with opposite direction */}
+              <div className="auto-scroll-container w-full max-w-6xl mx-auto mt-8">
+                <div className="auto-scroll-content" style={{ animationDirection: 'reverse' }}>
+                  {/* First set of logos */}
+                  <div className="auto-scroll-item flex items-center gap-8 md:gap-12 lg:gap-16 px-4">
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/6efKw86nImxJ1WsbxSJXhK/268fc2154b4f89594d364cb46b3152ef/assuronline.png"
+                      alt="Assur Online"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/3l0tdCOYly0y9PoJLnjZ1O/6b3a886f03ec9fd125a5d923c3c3c0f1/assurpeople.png"
+                      alt="Assur People"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/2sKIhBwMMcdGM1b56xS4m0/0cf3ee23ce8ec4a2a9ca33af5dd2c5f5/BestAssurances_logo2025.png"
+                      alt="Best Assurances"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/4cWEYQNpzPEysV5k78MLbU/6b28e24a76609489c00f9f022ab1b08e/direct-assurance.png"
+                      alt="Direct Assurance"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/72MMYU5fvtDrvkwPw7bpVO/74af51bab34a13260d0681c513ce204a/elsassur.png"
+                      alt="Elsassur"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/5VOxKVWPmdgjMZhb07pMSH/84c0c069767862a5f9f19cc09c4f4cb0/euroassurance.png"
+                      alt="Euro Assurance"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/2yfBNWhPl6CrFHa9BuXbPI/0877ce48cee243520a4f7d3bf6a2403a/Logo_Eurofil__1_.png"
+                      alt="Eurofil"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/1Oewg2RLnMMc2MzLOwofjB/cc5848a9f9430044cea2608566a9fc87/flitter.png"
+                      alt="Flitter"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/3VKRGPmO0FkfyoxnZMQgVB/f743c9bbca7fc43672fbfee1339af203/l-olivier-assurances.png"
+                      alt="L'Olivier Assurances"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/37GdPLu6NCT1Rs56oYkfVz/cbc206cd2534835a42452de5115a8088/leocare.png"
+                      alt="Leocare"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                  </div>
+
+                  {/* Duplicate the logos to create a seamless loop */}
+                  <div className="auto-scroll-item flex items-center gap-8 md:gap-12 lg:gap-16 px-4">
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/6efKw86nImxJ1WsbxSJXhK/268fc2154b4f89594d364cb46b3152ef/assuronline.png"
+                      alt="Assur Online"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/3l0tdCOYly0y9PoJLnjZ1O/6b3a886f03ec9fd125a5d923c3c3c0f1/assurpeople.png"
+                      alt="Assur People"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/2sKIhBwMMcdGM1b56xS4m0/0cf3ee23ce8ec4a2a9ca33af5dd2c5f5/BestAssurances_logo2025.png"
+                      alt="Best Assurances"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/4cWEYQNpzPEysV5k78MLbU/6b28e24a76609489c00f9f022ab1b08e/direct-assurance.png"
+                      alt="Direct Assurance"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/72MMYU5fvtDrvkwPw7bpVO/74af51bab34a13260d0681c513ce204a/elsassur.png"
+                      alt="Elsassur"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/5VOxKVWPmdgjMZhb07pMSH/84c0c069767862a5f9f19cc09c4f4cb0/euroassurance.png"
+                      alt="Euro Assurance"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/2yfBNWhPl6CrFHa9BuXbPI/0877ce48cee243520a4f7d3bf6a2403a/Logo_Eurofil__1_.png"
+                      alt="Eurofil"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/1Oewg2RLnMMc2MzLOwofjB/cc5848a9f9430044cea2608566a9fc87/flitter.png"
+                      alt="Flitter"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/3VKRGPmO0FkfyoxnZMQgVB/f743c9bbca7fc43672fbfee1339af203/l-olivier-assurances.png"
+                      alt="L'Olivier Assurances"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/37GdPLu6NCT1Rs56oYkfVz/cbc206cd2534835a42452de5115a8088/leocare.png"
+                      alt="Leocare"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Third row with normal direction */}
+              <div className="auto-scroll-container w-full max-w-6xl mx-auto mt-8">
+                <div className="auto-scroll-content" style={{ animationDuration: '50s' }}>
+                  {/* First set of logos */}
+                  <div className="auto-scroll-item flex items-center gap-8 md:gap-12 lg:gap-16 px-4">
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/7JG7KT8dkPoLegNm68RuYc/2c0a73ace73dee706fd8f0e1a798582e/lovys.png"
+                      alt="Lovys"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/7HYNsAzHbgFhR9hZsSjmSM/0f1a582bf2234e4a8a49cf5e2fb285a4/LOGO_MeilleurTauxAssurances.png"
+                      alt="Meilleur Taux Assurances"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/11YaYR2DG5JuakAahOhYJF/ae8a209863e1445f84fbfab12539c029/mieux-assure.png"
+                      alt="Mieux Assure"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/6fojsjcfbPAHk6k5qX1ZNA/9f45d8c2b4f75c7b03adc199c67a5ed7/ornikar-assurances.png"
+                      alt="Ornikar Assurances"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/yk2XMcPnQvKakJ3wPWSpe/160a0c77dadafbd2171a1917ecfdbe00/Selfassurance-nouveau_logo-vert_2_.png"
+                      alt="Self Assurance"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/4VdliocC78HmQ48E2nhCrL/7f816beae4a37c266cde88e956d31053/sos-malus.png"
+                      alt="SOS Malus"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/3QRuqQBYuTX7fad3ixXK81/9c3bba59aebf02cacbcc9ecb5f98ef26/teacerede.png"
+                      alt="Teacerede"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/10pobPJbu9njyqWKPTbQav/f6c5feb494126ec32a5e6d9acf9dbe3a/wilov.png"
+                      alt="Wilov"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/4KfURhIjRx8oS4I15rml4z/ef04dfaa6aff54c935b01b0ed6a3d72a/Logo-YouDrive-Direct-Assurance-new.jpg"
+                      alt="YouDrive Direct Assurance"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/1jBzG6mDgsv4f49NGE3y0u/927e929174312378c80acd519cea74e4/logo-abeille-assurances.jpg"
+                      alt="Abeille Assurances"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                  </div>
+
+                  {/* Duplicate the logos to create a seamless loop */}
+                  <div className="auto-scroll-item flex items-center gap-8 md:gap-12 lg:gap-16 px-4">
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/7JG7KT8dkPoLegNm68RuYc/2c0a73ace73dee706fd8f0e1a798582e/lovys.png"
+                      alt="Lovys"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/7HYNsAzHbgFhR9hZsSjmSM/0f1a582bf2234e4a8a49cf5e2fb285a4/LOGO_MeilleurTauxAssurances.png"
+                      alt="Meilleur Taux Assurances"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/11YaYR2DG5JuakAahOhYJF/ae8a209863e1445f84fbfab12539c029/mieux-assure.png"
+                      alt="Mieux Assure"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/6fojsjcfbPAHk6k5qX1ZNA/9f45d8c2b4f75c7b03adc199c67a5ed7/ornikar-assurances.png"
+                      alt="Ornikar Assurances"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/yk2XMcPnQvKakJ3wPWSpe/160a0c77dadafbd2171a1917ecfdbe00/Selfassurance-nouveau_logo-vert_2_.png"
+                      alt="Self Assurance"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/4VdliocC78HmQ48E2nhCrL/7f816beae4a37c266cde88e956d31053/sos-malus.png"
+                      alt="SOS Malus"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/3QRuqQBYuTX7fad3ixXK81/9c3bba59aebf02cacbcc9ecb5f98ef26/teacerede.png"
+                      alt="Teacerede"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/10pobPJbu9njyqWKPTbQav/f6c5feb494126ec32a5e6d9acf9dbe3a/wilov.png"
+                      alt="Wilov"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/4KfURhIjRx8oS4I15rml4z/ef04dfaa6aff54c935b01b0ed6a3d72a/Logo-YouDrive-Direct-Assurance-new.jpg"
+                      alt="YouDrive Direct Assurance"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                    <Image
+                      src="https://images.ctfassets.net/8tpbxzn2rg50/1jBzG6mDgsv4f49NGE3y0u/927e929174312378c80acd519cea74e4/logo-abeille-assurances.jpg"
+                      alt="Abeille Assurances"
+                      width={250}
+                      height={190}
+                      className="h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works Section */}
+        <section className="w-full py-20 md:py-32 bg-muted/30 relative overflow-hidden">
+          <div className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_40%,transparent_100%)]"></div>
+
+          <div className="container px-4 md:px-6 relative">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="flex flex-col items-center justify-center space-y-4 text-center mb-16">
+              {/*<h2 className="text-3xl md:text-4xl font-bold tracking-tight">Simple Process, Powerful Results</h2>
+              <p className="max-w-[800px] text-muted-foreground md:text-lg">
+                Get started in minutes and see the difference our platform can make for your business.
+              </p>*/}
+            </motion.div>
+
+            <div className="grid md:grid-cols-4 gap-8 md:gap-12 relative">
+              <div className="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-border to-transparent -translate-y-1/2 z-0"></div>
+
+              {[
+                {
+                  step: <Image src="/icons/money.png" alt="Tool icon" width={32} height={32} className="mx-auto invert" />,
+                  title: "Create Account",
+                  description: "Sign up in seconds with just your email. No credit card required to get started.",
+                },
+                {
+                  step: <Image src="/icons/fast-delivery.png" alt="Tool icon" width={32} height={32} className="mx-auto invert" />,
+                  title: "Configure Workspace",
+                  description: "Customize your workspace to match your team's unique workflow and requirements.",
+                },
+                {
+                  step: <Image src="/icons/gift-box.png" alt="Tool icon" width={32} height={32} className="mx-auto invert" />,
+                  title: "Boost Productivity",
+                  description: "Start using our powerful features to streamline processes and achieve your goals.",
+                },
+                {
+                  step: <Image src="/icons/accreditation.png" alt="Tool icon" width={32} height={32} className="mx-auto invert" />,
+                  title: "......",
+                  description: ".................",
+                },
+              ].map((step, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  className="relative z-10 flex flex-col items-center text-center space-y-4"
+                >
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground text-xl font-bold shadow-lg">
+                    {step.step}
+                  </div>
+                  <h3 className="text-xl font-bold">{step.title}</h3>
+                  <p className="text-muted-foreground">{step.description}</p>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
@@ -290,11 +812,7 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
-            >
-              <Badge className="rounded-full px-4 py-1.5 text-sm font-medium" variant="secondary">
-                Features
-              </Badge>
+              className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Everything You Need to Succeed</h2>
               <p className="max-w-[800px] text-muted-foreground md:text-lg">
                 Our comprehensive platform provides all the tools you need to streamline your workflow, boost
@@ -326,66 +844,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* How It Works Section */}
-        <section className="w-full py-20 md:py-32 bg-muted/30 relative overflow-hidden">
-          <div className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_40%,transparent_100%)]"></div>
-
-          <div className="container px-4 md:px-6 relative">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="flex flex-col items-center justify-center space-y-4 text-center mb-16"
-            >
-              <Badge className="rounded-full px-4 py-1.5 text-sm font-medium" variant="secondary">
-                How It Works
-              </Badge>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Simple Process, Powerful Results</h2>
-              <p className="max-w-[800px] text-muted-foreground md:text-lg">
-                Get started in minutes and see the difference our platform can make for your business.
-              </p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-3 gap-8 md:gap-12 relative">
-              <div className="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-border to-transparent -translate-y-1/2 z-0"></div>
-
-              {[
-                {
-                  step: "01",
-                  title: "Create Account",
-                  description: "Sign up in seconds with just your email. No credit card required to get started.",
-                },
-                {
-                  step: "02",
-                  title: "Configure Workspace",
-                  description: "Customize your workspace to match your team's unique workflow and requirements.",
-                },
-                {
-                  step: "03",
-                  title: "Boost Productivity",
-                  description: "Start using our powerful features to streamline processes and achieve your goals.",
-                },
-              ].map((step, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className="relative z-10 flex flex-col items-center text-center space-y-4"
-                >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground text-xl font-bold shadow-lg">
-                    {step.step}
-                  </div>
-                  <h3 className="text-xl font-bold">{step.title}</h3>
-                  <p className="text-muted-foreground">{step.description}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Testimonials Section */}
         <section id="testimonials" className="w-full py-20 md:py-32">
           <div className="container px-4 md:px-6">
@@ -399,87 +857,111 @@ export default function LandingPage() {
               <Badge className="rounded-full px-4 py-1.5 text-sm font-medium" variant="secondary">
                 Testimonials
               </Badge>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Loved by Teams Worldwide</h2>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Avis de nos clients</h2>
               <p className="max-w-[800px] text-muted-foreground md:text-lg">
                 Don't just take our word for it. See what our customers have to say about their experience.
               </p>
             </motion.div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {[
-                {
-                  quote:
-                    "SaaSify has transformed how we manage our projects. The automation features have saved us countless hours of manual work.",
-                  author: "Sarah Johnson",
-                  role: "Project Manager, TechCorp",
-                  rating: 5,
-                },
-                {
-                  quote:
-                    "The analytics dashboard provides insights we never had access to before. It's helped us make data-driven decisions that have improved our ROI.",
-                  author: "Michael Chen",
-                  role: "Marketing Director, GrowthLabs",
-                  rating: 5,
-                },
-                {
-                  quote:
-                    "Customer support is exceptional. Any time we've had an issue, the team has been quick to respond and resolve it. Couldn't ask for better service.",
-                  author: "Emily Rodriguez",
-                  role: "Operations Lead, StartupX",
-                  rating: 5,
-                },
-                {
-                  quote:
-                    "We've tried several similar solutions, but none compare to the ease of use and comprehensive features of SaaSify. It's been a game-changer.",
-                  author: "David Kim",
-                  role: "CEO, InnovateNow",
-                  rating: 5,
-                },
-                {
-                  quote:
-                    "The collaboration tools have made remote work so much easier for our team. We're more productive than ever despite being spread across different time zones.",
-                  author: "Lisa Patel",
-                  role: "HR Director, RemoteFirst",
-                  rating: 5,
-                },
-                {
-                  quote:
-                    "Implementation was seamless, and the ROI was almost immediate. We've reduced our operational costs by 30% since switching to SaaSify.",
-                  author: "James Wilson",
-                  role: "COO, ScaleUp Inc",
-                  rating: 5,
-                },
-              ].map((testimonial, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.05 }}
-                >
-                  <Card className="h-full overflow-hidden border-border/40 bg-gradient-to-b from-background to-muted/10 backdrop-blur transition-all hover:shadow-md">
-                    <CardContent className="p-6 flex flex-col h-full">
-                      <div className="flex mb-4">
-                        {Array(testimonial.rating)
-                          .fill(0)
-                          .map((_, j) => (
-                            <Star key={j} className="size-4 text-yellow-500 fill-yellow-500" />
-                          ))}
+            <div className="relative">
+              <Carousel
+                opts={{
+                  align: "start",
+                  loop: true,
+                }}
+                className="w-full"
+              >
+                <CarouselContent>
+                  {[
+                    [
+                      {
+                        quote:
+                          "Service ultra rapide ! J’ai rempli le formulaire en ligne et j’ai été rappelé dans la foulée. Mon pare-brise a été remplacé le lendemain à mon domicile. Je recommande à 200 %.",
+                        author: "Nadia L.",
+                        role: "Strasbourg",
+                        rating: 5,
+                      },
+                      {
+                        quote:
+                          "Franchement bluffé ! Aucun frais à payer, ils ont tout pris en charge avec mon assurance. Technicien ponctuel, travail propre, et en plus très sympa.",
+                        author: "Yassine M.",
+                        role: "Montpellier",
+                        rating: 5,
+                      },
+                      {
+                        quote:
+                          "Le service client est très réactif. Je devais partir en vacances, ils m’ont trouvé un créneau en urgence. Mon pare-brise a été changé en moins de 2h. Rien à dire.",
+                        author: "Céline T.",
+                        role: "Nantes",
+                        rating: 5,
+                      },
+                    ],
+                    [
+                      {
+                        quote:
+                          "Un service impeccable, rapide et sans prise de tête. Ils ont tout géré avec mon assurance. Merci Bris de Glace Pro !",
+                        author: "Mehdi M.",
+                        role: "Lyon",
+                        rating: 5,
+                      },
+                      {
+                        quote:
+                          "J’ai été rappelé en moins de 10 minutes après ma demande en ligne. Intervention dès le lendemain. Top service.",
+                        author: "Julie O.",
+                        role: "Lille",
+                        rating: 5,
+                      },
+                      {
+                        quote:
+                          "Je ne pensais pas que ce serait aussi simple. J’ai envoyé une photo de l’impact par WhatsApp, on m’a confirmé le remplacement gratuit et le technicien est venu le lendemain. Très pro.",
+                        author: "David R.",
+                        role: "Dijon",
+                        rating: 5,
+                      },
+                    ],
+                  ].map((group, groupIndex) => (
+                    <CarouselItem key={groupIndex} className="md:basis-full">
+                      <div className="grid gap-6 md:grid-cols-3">
+                        {group.map((testimonial, i) => (
+                          <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: i * 0.1 }}
+                          >
+                            <Card className="h-full overflow-hidden border-border/40 bg-gradient-to-b from-background to-muted/10 backdrop-blur transition-all hover:shadow-md">
+                              <CardContent className="p-6 flex flex-col h-full">
+                                <div className="flex mb-4">
+                                  {Array(testimonial.rating)
+                                    .fill(0)
+                                    .map((_, j) => (
+                                      <Star key={j} className="size-4 text-yellow-500 fill-yellow-500" />
+                                    ))}
+                                </div>
+                                <p className="text-lg mb-6 flex-grow">{testimonial.quote}</p>
+                                <div className="flex items-center gap-4 mt-auto pt-4 border-t border-border/40">
+                                  <div className="size-10 rounded-full bg-muted flex items-center justify-center text-foreground font-medium">
+                                    {testimonial.author.charAt(0)}
+                                  </div>
+                                  <div>
+                                    <p className="font-medium">{testimonial.author}</p>
+                                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          </motion.div>
+                        ))}
                       </div>
-                      <p className="text-lg mb-6 flex-grow">{testimonial.quote}</p>
-                      <div className="flex items-center gap-4 mt-auto pt-4 border-t border-border/40">
-                        <div className="size-10 rounded-full bg-muted flex items-center justify-center text-foreground font-medium">
-                          {testimonial.author.charAt(0)}
-                        </div>
-                        <div>
-                          <p className="font-medium">{testimonial.author}</p>
-                          <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <div className="flex justify-center mt-8">
+                  <CarouselPrevious className="static translate-y-0 mr-2" />
+                  <CarouselNext className="static translate-y-0 ml-2" />
+                </div>
+              </Carousel>
             </div>
           </div>
         </section>

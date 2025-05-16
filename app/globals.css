@@ -92,3 +92,17 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Add your custom CSS classes here */
+.text-1 {
+  font-size: 1rem;
+  color: #333;
+  /* other styles */
+}
+
+/* For selection styling */
+::selection {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+

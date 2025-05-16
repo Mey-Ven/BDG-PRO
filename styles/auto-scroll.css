@@ -1,0 +1,28 @@
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.auto-scroll-container {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.auto-scroll-content {
+  display: flex;
+  animation: scroll 45s linear infinite;
+  width: max-content;
+}
+
+.auto-scroll-item {
+  flex-shrink: 0;
+}
+
+.auto-scroll-content:hover {
+  animation-play-state: paused;
+}
