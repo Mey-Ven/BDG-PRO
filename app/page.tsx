@@ -13,10 +13,6 @@ import {
   Sun,
   ArrowRight,
   Star,
-  Zap,
-  Shield,
-  Users,
-  BarChart,
   Layers,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -68,34 +64,24 @@ export default function LandingPage() {
 
   const features = [
     {
-      title: "Smart Automation",
-      description: "Automate repetitive tasks and workflows to save time and reduce errors.",
-      icon: <Zap className="size-5" />,
+      title: "Remplacement de pare-brise",
+      description: "Nous remplaçons votre pare-brise endommagé dans les meilleurs délais, avec des pièces de qualité d’origine.",
+      icon: <Image src="/icons/exchange.png" alt="Tool icon" width={32} height={32} className="icn-service" />,
     },
     {
-      title: "Advanced Analytics",
-      description: "Gain valuable insights with real-time data visualization and reporting.",
-      icon: <BarChart className="size-5" />,
+      title: "Réparation d’impact",
+      description: "Une intervention rapide pour éviter le remplacement complet. Une solution simple, rapide et durable.",
+      icon: <Image src="/icons/tool.png" alt="Exchange icon" width={32} height={32} className="icn-service" />,
     },
     {
-      title: "Team Collaboration",
-      description: "Work together seamlessly with integrated communication tools.",
-      icon: <Users className="size-5" />,
+      title: "Démarches simplifiées",
+      description: "Bris de Glace Pro s’occupe de tout avec votre assurance : aucune avance de frais et zéro paperasse.",
+      icon: <Image src="/icons/no-money.png" alt="Fast delivery icon" width={32} height={32} className="icn-service"/>,
     },
     {
-      title: "Enterprise Security",
-      description: "Keep your data safe with end-to-end encryption and compliance features.",
-      icon: <Shield className="size-5" />,
-    },
-    {
-      title: "Seamless Integration",
-      description: "Connect with your favorite tools through our extensive API ecosystem.",
-      icon: <Layers className="size-5" />,
-    },
-    {
-      title: "24/7 Support",
-      description: "Get help whenever you need it with our dedicated support team.",
-      icon: <Star className="size-5" />,
+      title: "Véhicule de courtoisie",
+      description: "Un véhicule peut vous être prêté pendant l’intervention (selon disponibilité).",
+      icon: <Image src="/icons/rapid.png" alt="Accreditation icon" width={32} height={32} className="icn-service" />,
     },
   ]
 
@@ -150,7 +136,7 @@ export default function LandingPage() {
               Devenir Partenaire
             </Link>
             <Button className="rounded-full">
-              Get Started
+              Prendre Rendez-Vous
               <ChevronRight className="ml-1 size-4" />
             </Button>
           </div>
@@ -235,7 +221,7 @@ export default function LandingPage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" className="rounded-full h-12 px-8 text-base shadow-md font-medium">
-                  Start Free Trial
+                  Prendre Rendez-Vous
                   <ArrowRight className="ml-2 size-4" />
                 </Button>
                 <Button
@@ -243,7 +229,7 @@ export default function LandingPage() {
                   variant="outline"
                   className="rounded-full h-12 px-8 text-base bg-background/50 backdrop-blur-sm border-white/20 shadow-md hover:bg-background/70 text-foreground dark:text-foreground font-medium"
                 >
-                  Book a Demo
+                 Devenir Partenaire
                 </Button>
               </div>
               <div className="flex flex-wrap items-center justify-center gap-4 mt-6 text-sm text-foreground/90 dark:text-foreground/90">
@@ -251,19 +237,19 @@ export default function LandingPage() {
                   <div className="bg-primary/20 dark:bg-primary/30 rounded-full p-0.5">
                     <Check className="size-3.5 text-primary" />
                   </div>
-                  <span className="font-medium">No credit card</span>
+                  <span className="font-medium">Intervention dans toute la France</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <div className="bg-primary/20 dark:bg-primary/30 rounded-full p-0.5">
                     <Check className="size-3.5 text-primary" />
                   </div>
-                  <span className="font-medium">14-day trial</span>
+                  <span className="font-medium">Rendez-vous rapide en ligne ou par téléphone</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <div className="bg-primary/20 dark:bg-primary/30 rounded-full p-0.5">
                     <Check className="size-3.5 text-primary" />
                   </div>
-                  <span className="font-medium">Cancel anytime</span>
+                  <span className="font-medium"> Techniciens spécialisés et certifiés</span>
                 </div>
               </div>
             </motion.div>
@@ -766,23 +752,23 @@ export default function LandingPage() {
               {[
                 {
                   step: <Image src="/icons/money.png" alt="Tool icon" width={32} height={32} className="mx-auto invert" />,
-                  title: "Create Account",
-                  description: "Sign up in seconds with just your email. No credit card required to get started.",
+                  title: "Rien à avancer",
+                  description: "Quel aue soit votre assureur.",
                 },
                 {
                   step: <Image src="/icons/fast-delivery.png" alt="Tool icon" width={32} height={32} className="mx-auto invert" />,
-                  title: "Configure Workspace",
-                  description: "Customize your workspace to match your team's unique workflow and requirements.",
-                },
-                {
-                  step: <Image src="/icons/gift-box.png" alt="Tool icon" width={32} height={32} className="mx-auto invert" />,
-                  title: "Boost Productivity",
-                  description: "Start using our powerful features to streamline processes and achieve your goals.",
+                  title: "Déplacement gratuit",
+                  description: "Partout en france.",
                 },
                 {
                   step: <Image src="/icons/accreditation.png" alt="Tool icon" width={32} height={32} className="mx-auto invert" />,
-                  title: "......",
-                  description: ".................",
+                  title: "Garantie à vie",
+                  description: "Toute intervention vitrage.",
+                },
+                {
+                  step: <Image src="/icons/gift-box.png" alt="Tool icon" width={32} height={32} className="mx-auto invert" />,
+                  title: "Cadeaux",
+                  description: "Jusqu’a 250€",
                 },
               ].map((step, i) => (
                 <motion.div
@@ -813,10 +799,9 @@ export default function LandingPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
               className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Everything You Need to Succeed</h2>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Nos services</h2>
               <p className="max-w-[800px] text-muted-foreground md:text-lg">
-                Our comprehensive platform provides all the tools you need to streamline your workflow, boost
-                productivity, and achieve your goals.
+                Remplacement vitrage automobile ( pare-brise )
               </p>
             </motion.div>
 
@@ -1179,9 +1164,9 @@ export default function LandingPage() {
               <Badge className="rounded-full px-4 py-1.5 text-sm font-medium" variant="secondary">
                 FAQ
               </Badge>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Frequently Asked Questions</h2>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Questions fréquentes</h2>
               <p className="max-w-[800px] text-muted-foreground md:text-lg">
-                Find answers to common questions about our platform.
+                Voici les réponses aux questions fréquentes de nos clients.
               </p>
             </motion.div>
 
@@ -1189,35 +1174,21 @@ export default function LandingPage() {
               <Accordion type="single" collapsible className="w-full">
                 {[
                   {
-                    question: "How does the 14-day free trial work?",
+                    question: "Le remplacement est-il vraiment gratuit ?",
                     answer:
-                      "Our 14-day free trial gives you full access to all features of your selected plan. No credit card is required to sign up, and you can cancel at any time during the trial period with no obligation.",
+                      "Oui, si vous êtes assuré bris de glace sans franchise. Sinon, nous vous proposons un devis clair et sans surprise.",
                   },
                   {
-                    question: "Can I change plans later?",
+                    question: "Comment prendre rendez-vous ?",
                     answer:
-                      "Yes, you can upgrade or downgrade your plan at any time. If you upgrade, the new pricing will be prorated for the remainder of your billing cycle. If you downgrade, the new pricing will take effect at the start of your next billing cycle.",
+                      "Remplissez notre formulaire en ligne ou appelez-nous. Un conseiller vous rappelle dans les 10 minutes.",
                   },
                   {
-                    question: "Is there a limit to how many users I can add?",
+                    question: " Combien de temps dure l’intervention ?",
                     answer:
-                      "The number of users depends on your plan. The Starter plan allows up to 5 team members, the Professional plan allows up to 20, and the Enterprise plan has no limit on team members.",
+                      "Environ 1h30. Nous vous indiquons le temps exact selon votre véhicule.",
                   },
-                  {
-                    question: "Do you offer discounts for nonprofits or educational institutions?",
-                    answer:
-                      "Yes, we offer special pricing for nonprofits, educational institutions, and open-source projects. Please contact our sales team for more information.",
-                  },
-                  {
-                    question: "How secure is my data?",
-                    answer:
-                      "We take security very seriously. All data is encrypted both in transit and at rest. We use industry-standard security practices and regularly undergo security audits. Our platform is compliant with GDPR, CCPA, and other relevant regulations.",
-                  },
-                  {
-                    question: "What kind of support do you offer?",
-                    answer:
-                      "Support varies by plan. All plans include email support, with the Professional plan offering priority email support. The Enterprise plan includes 24/7 phone and email support. We also have an extensive knowledge base and community forum available to all users.",
-                  },
+
                 ].map((faq, i) => (
                   <motion.div
                     key={i}

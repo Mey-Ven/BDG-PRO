@@ -5,6 +5,8 @@ import "@/styles/auto-scroll.css"
 import { Inter } from "next/font/google"
 import type { Metadata } from "next"
 import { ThemeProvider } from "@/components/theme-provider"
+import WhatsAppButton from "@/components/whatsapp-button"
+
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -24,6 +26,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
+          <WhatsAppButton />
         </ThemeProvider>
       </body>
     </html>

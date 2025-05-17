@@ -100,6 +100,11 @@ body {
   /* other styles */
 }
 
+/* Style pour les icônes de service */
+.icn-service {
+  filter: brightness(0) saturate(100%) invert(27%) sepia(80%) saturate(1500%) hue-rotate(210deg) brightness(91%) contrast(97%);
+}
+
 /* For selection styling */
 ::selection {
   background-color: hsl(var(--primary));
