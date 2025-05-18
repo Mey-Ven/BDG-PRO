@@ -5,7 +5,12 @@ import "@/styles/auto-scroll.css"
 import { Inter } from "next/font/google"
 import type { Metadata } from "next"
 import { ThemeProvider } from "@/components/theme-provider"
-import WhatsAppButton from "@/components/whatsapp-button"
+import WhatsAppButton from "@/components/whatsapp-button-new-fixed"
+import CarDamageForm from "@/components/car-damage-form"
+import { CarDamageFormProvider } from "@/components/car-damage-form-context"
+import PartnerForm from "@/components/partner-form"
+import { PartnerFormProvider } from "@/components/partner-form-context"
+import { Toaster } from "@/components/ui/sonner"
 
 
 const inter = Inter({ subsets: ["latin"] })
@@ -23,10 +28,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+      </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {children}
-          <WhatsAppButton />
+          <CarDamageFormProvider>
+            <PartnerFormProvider>
+              {children}
+              <WhatsAppButton />
+              <CarDamageForm />
+              <PartnerForm />
+              <Toaster />
+            </PartnerFormProvider>
+          </CarDamageFormProvider>
         </ThemeProvider>
       </body>
     </html>

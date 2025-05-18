@@ -7,8 +7,10 @@ import Image from "next/image"
 export default function WhatsAppButton() {
   const [isHovered, setIsHovered] = useState(false)
 
-  const phoneNumber = "+33685041049"
-  const message = encodeURIComponent("Bonjour, je souhaite prendre rendez-vous pour remplacer mon pare-brise.")
+  const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "+33000000000"
+
+  // Message avec emojis
+  const message = encodeURIComponent("C’est Bris de Glace Pro 👋\n\nBonne nouvelle ! Votre remplacement de pare-brise est 100% gratuit si vous êtes assuré bris de glace.\nNous nous occupons de toutes les démarches avec votre assurance, sans avance de frais 💸\n🎁 Et en plus, un cadeau vous est offert après l'intervention !\n\n📲 Pour bloquer votre rendez-vous, merci de nous envoyer rapidement une photo de votre carte grise et de votre attestation d'assurance ici sur WhatsApp.\nDès réception, on vous propose une date d'intervention selon vos disponibilités.\n\nÀ très vite ! 🚘")
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`
 
   return (

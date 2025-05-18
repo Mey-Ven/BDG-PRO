@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { testimonials } from "../testimonials-data"
+import { Footer } from "@/components/footer"
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
@@ -15,6 +17,8 @@ import {
   Star,
   Layers,
 } from "lucide-react"
+import { useCarDamageForm } from "@/components/car-damage-form-context"
+import { usePartnerForm } from "@/components/partner-form-context"
 import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
@@ -28,6 +32,8 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const { openForm } = useCarDamageForm()
+  const { openForm: openPartnerForm } = usePartnerForm()
 
   useEffect(() => {
     setMounted(true)
@@ -66,26 +72,27 @@ export default function LandingPage() {
     {
       title: "Remplacement de pare-brise",
       description: "Nous remplaçons votre pare-brise endommagé dans les meilleurs délais, avec des pièces de qualité d’origine.",
-      icon: <Image src="/icons/exchange.png" alt="Tool icon" width={32} height={32} className="icn-service" />,
+      icon: <Image src="/icons/exchange.png" alt="Tool icon" width={32} height={32} className="icn-service w-full h-full" />,
     },
     {
       title: "Réparation d’impact",
       description: "Une intervention rapide pour éviter le remplacement complet. Une solution simple, rapide et durable.",
-      icon: <Image src="/icons/tool.png" alt="Exchange icon" width={32} height={32} className="icn-service" />,
+      icon: <Image src="/icons/tool.png" alt="Exchange icon" width={32} height={32} className="icn-service w-full h-full" />,
     },
     {
       title: "Démarches simplifiées",
       description: "Bris de Glace Pro s’occupe de tout avec votre assurance : aucune avance de frais et zéro paperasse.",
-      icon: <Image src="/icons/no-money.png" alt="Fast delivery icon" width={32} height={32} className="icn-service"/>,
+      icon: <Image src="/icons/no-money.png" alt="Fast delivery icon" width={32} height={32} className="icn-service w-full h-full"/>,
     },
     {
       title: "Véhicule de courtoisie",
       description: "Un véhicule peut vous être prêté pendant l’intervention (selon disponibilité).",
-      icon: <Image src="/icons/rapid.png" alt="Accreditation icon" width={32} height={32} className="icn-service" />,
+      icon: <Image src="/icons/rapid.png" alt="Accreditation icon" width={32} height={32} className="icn-service w-full h-full" />,
     },
   ]
 
   return (
+
     <div className="flex min-h-[100dvh] flex-col">
       <header
         className={`sticky top-0 z-50 w-full backdrop-blur-lg transition-all duration-300 ${isScrolled ? "bg-background/80 shadow-sm" : "bg-transparent"}`}
@@ -107,22 +114,17 @@ export default function LandingPage() {
             <Link
               href="#features"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-              Services
+              Nos Services
             </Link>
             <Link
               href="#testimonials"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-              Testimonials
-            </Link>
-            <Link
-              href="#pricing"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-              Services
+              Avis de nos clients
             </Link>
             <Link
               href="#faq"
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-              FAQ
+              Questions fréquentes
             </Link>
           </nav>
           <div className="hidden md:flex gap-4 items-center">
@@ -130,14 +132,16 @@ export default function LandingPage() {
               {mounted && theme === "dark" ? <Sun className="size-[18px]" /> : <Moon className="size-[18px]" />}
               <span className="sr-only">Toggle theme</span>
             </Button>
-            <Link
-              href="#"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+            <Button
+              variant="outline"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground border-gray-300 dark:border-gray-700 rounded-full"
+              onClick={openPartnerForm}
+            >
               Devenir Partenaire
-            </Link>
-            <Button className="rounded-full">
+            </Button>
+            <Button size="lg" className="rounded-full h-12 px-8 text-base shadow-md font-medium" onClick={openForm}>
               Prendre Rendez-Vous
-              <ChevronRight className="ml-1 size-4" />
+              <ArrowRight className="ml-2 size-4" />
             </Button>
           </div>
           <div className="flex items-center gap-4 md:hidden">
@@ -160,24 +164,31 @@ export default function LandingPage() {
           >
             <div className="container py-4 flex flex-col gap-4">
               <Link href="#features" className="py-2 text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
-                Services
+                Nos Services
               </Link>
               <Link href="#testimonials" className="py-2 text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
-                Testimonials
-              </Link>
-              <Link href="#pricing" className="py-2 text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
-                Pricing
+                Avis de nos clients
               </Link>
               <Link href="#faq" className="py-2 text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
-                FAQ
+                Questions fréquentes
               </Link>
               <div className="flex flex-col gap-2 pt-2 border-t">
-                <Link href="#" className="py-2 text-sm font-medium" onClick={() => setMobileMenuOpen(false)}>
-                  Log in
-                </Link>
-                <Button className="rounded-full">
-                  Get Started
+                <Button className="rounded-full" onClick={() => {
+                  setMobileMenuOpen(false);
+                  openForm();
+                }}>
+                  Prendre Rendez-Vous
                   <ChevronRight className="ml-1 size-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="rounded-full border-gray-300 dark:border-gray-700 text-muted-foreground"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    openPartnerForm();
+                  }}
+                >
+                  Devenir Partenaire
                 </Button>
               </div>
             </div>
@@ -186,7 +197,7 @@ export default function LandingPage() {
       </header>
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="w-full min-h-screen flex items-center overflow-hidden relative pt-16 md:pt-0">
+        <section id="hero" className="w-full min-h-screen flex items-center overflow-hidden relative pt-16 md:pt-0">
           {/* Background Image with Overlay */}
           <div className="absolute inset-0 -z-20">
             <Image
@@ -220,7 +231,7 @@ export default function LandingPage() {
                 Nous prenons en charge toutes les démarches avec votre assurance. Intervention rapide, zéro avance de frais, et un service client disponible 7j/7.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="rounded-full h-12 px-8 text-base shadow-md font-medium">
+                <Button size="lg" className="rounded-full h-12 px-8 text-base shadow-md font-medium" onClick={openForm}>
                   Prendre Rendez-Vous
                   <ArrowRight className="ml-2 size-4" />
                 </Button>
@@ -228,6 +239,7 @@ export default function LandingPage() {
                   size="lg"
                   variant="outline"
                   className="rounded-full h-12 px-8 text-base bg-background/50 backdrop-blur-sm border-white/20 shadow-md hover:bg-background/70 text-foreground dark:text-foreground font-medium"
+                  onClick={openPartnerForm}
                 >
                  Devenir Partenaire
                 </Button>
@@ -729,6 +741,88 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* Featured Images Section */}
+        <section className="w-full py-16 bg-gradient-to-b from-background to-muted/30">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-10">
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
+                Notre expertise à votre service
+              </h2>
+              <p className="text-muted-foreground text-lg max-w-[800px] mx-auto">
+                Des professionnels qualifiés pour tous vos besoins de remplacement et réparation de pare-brise
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="group relative overflow-hidden rounded-xl shadow-lg"
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/10 z-10"></div>
+                <Image
+                  src="/pbr2.jpg"
+                  alt="Remplacement de pare-brise"
+                  width={800}
+                  height={500}
+                  className="w-full h-[400px] object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+                  <h3 className="text-2xl font-bold text-white mb-2">Remplacement professionnel</h3>
+                  <p className="text-white/90 mb-4">
+                    Nos techniciens certifiés utilisent des équipements de pointe pour un remplacement rapide et sécurisé de votre pare-brise.
+                  </p>
+                  <Button
+                    variant="outline"
+                    className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20"
+                    onClick={openForm}
+                  >
+                    Prendre rendez-vous
+                    <ArrowRight className="ml-2 size-4" />
+                  </Button>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="group relative overflow-hidden rounded-xl shadow-lg"
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/10 z-10"></div>
+                <Image
+                  src="/pbr3.jpg"
+                  alt="Réparation d'impact"
+                  width={800}
+                  height={500}
+                  className="w-full h-[400px] object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+                  <h3 className="text-2xl font-bold text-white mb-2">Réparation d'impact</h3>
+                  <p className="text-white/90 mb-4">
+                    Une intervention rapide sur un impact peut éviter le remplacement complet. Nos experts évaluent et réparent les dommages mineurs.
+                  </p>
+                  <Button
+                    variant="outline"
+                    className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20"
+                    onClick={() => {
+                      const message = "Bonjour, je souhaite obtenir un devis pour une réparation d'impact sur mon pare-brise.";
+                      const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE?.replace(/\+/g, '') || "33000000000";
+                      window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+                    }}
+                  >
+                    Demander un devis via WhatsApp
+                    <Image src="/icons/whatsapp.png" alt="WhatsApp" width={16} height={16} className="ml-2 size-4 invert" />
+                  </Button>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
         {/* How It Works Section */}
         <section className="w-full py-20 md:py-32 bg-muted/30 relative overflow-hidden">
           <div className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_40%,transparent_100%)]"></div>
@@ -746,7 +840,7 @@ export default function LandingPage() {
               </p>*/}
             </motion.div>
 
-            <div className="grid md:grid-cols-4 gap-8 md:gap-12 relative">
+            <div className="grid grid-cols-4 md:grid-cols-4 gap-2 md:gap-12 relative">
               <div className="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-border to-transparent -translate-y-1/2 z-0"></div>
 
               {[
@@ -777,13 +871,15 @@ export default function LandingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className="relative z-10 flex flex-col items-center text-center space-y-4"
+                  className="relative z-10 flex flex-col items-center text-center space-y-1 sm:space-y-2 md:space-y-4"
                 >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground text-xl font-bold shadow-lg">
-                    {step.step}
+                  <div className="flex h-8 w-8 sm:h-12 md:h-16 sm:w-12 md:w-16 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/70 text-primary-foreground text-xs sm:text-sm md:text-xl font-bold shadow-lg">
+                    <div className="size-4 sm:size-6 md:size-8">
+                      {step.step}
+                    </div>
                   </div>
-                  <h3 className="text-xl font-bold">{step.title}</h3>
-                  <p className="text-muted-foreground">{step.description}</p>
+                  <h3 className="text-[10px] sm:text-sm md:text-xl font-bold">{step.title}</h3>
+                  <p className="text-[8px] sm:text-xs md:text-base text-muted-foreground">{step.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -810,17 +906,19 @@ export default function LandingPage() {
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
-              className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              className="grid gap-2 grid-cols-4 md:grid-cols-2 lg:grid-cols-4"
             >
               {features.map((feature, i) => (
                 <motion.div key={i} variants={item}>
                   <Card className="h-full overflow-hidden border-border/40 bg-gradient-to-b from-background to-muted/10 backdrop-blur transition-all hover:shadow-md">
-                    <CardContent className="p-6 flex flex-col h-full">
-                      <div className="size-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary mb-4">
-                        {feature.icon}
+                    <CardContent className="p-1 sm:p-3 md:p-6 flex flex-col h-full">
+                      <div className="size-6 sm:size-8 md:size-10 rounded-full bg-[hsl(221,83%,53%)] flex items-center justify-center mb-1 sm:mb-2 md:mb-4 mx-auto">
+                        <div className="size-3 sm:size-4 md:size-5 text-white">
+                          {feature.icon}
+                        </div>
                       </div>
-                      <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                      <p className="text-muted-foreground">{feature.description}</p>
+                      <h3 className="text-[10px] sm:text-xs md:text-xl font-bold mb-0.5 sm:mb-1 md:mb-2 text-center">{feature.title}</h3>
+                      <p className="text-[8px] sm:text-xs md:text-base text-muted-foreground text-center">{feature.description}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -839,12 +937,9 @@ export default function LandingPage() {
               transition={{ duration: 0.5 }}
               className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
             >
-              <Badge className="rounded-full px-4 py-1.5 text-sm font-medium" variant="secondary">
-                Testimonials
-              </Badge>
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Avis de nos clients</h2>
               <p className="max-w-[800px] text-muted-foreground md:text-lg">
-                Don't just take our word for it. See what our customers have to say about their experience.
+                Ils nous ont fait confiance, voici leur retour
               </p>
             </motion.div>
 
@@ -880,6 +975,13 @@ export default function LandingPage() {
                         role: "Nantes",
                         rating: 5,
                       },
+                      {
+                        quote:
+                          "Intervention rapide et professionnelle. Le technicien a pris le temps de m'expliquer toutes les étapes. Très satisfait du résultat !",
+                        author: "Thomas B.",
+                        role: "Bordeaux",
+                        rating: 5,
+                      },
                     ],
                     [
                       {
@@ -903,10 +1005,17 @@ export default function LandingPage() {
                         role: "Dijon",
                         rating: 5,
                       },
+                      {
+                        quote:
+                          "Excellente expérience ! Prise en charge complète avec mon assurance et remplacement effectué en moins de 2 heures. Je recommande vivement.",
+                        author: "Sophie M.",
+                        role: "Toulouse",
+                        rating: 5,
+                      },
                     ],
                   ].map((group, groupIndex) => (
                     <CarouselItem key={groupIndex} className="md:basis-full">
-                      <div className="grid gap-6 md:grid-cols-3">
+                      <div className="grid gap-2 grid-cols-4 md:grid-cols-4">
                         {group.map((testimonial, i) => (
                           <motion.div
                             key={i}
@@ -916,22 +1025,22 @@ export default function LandingPage() {
                             transition={{ duration: 0.5, delay: i * 0.1 }}
                           >
                             <Card className="h-full overflow-hidden border-border/40 bg-gradient-to-b from-background to-muted/10 backdrop-blur transition-all hover:shadow-md">
-                              <CardContent className="p-6 flex flex-col h-full">
-                                <div className="flex mb-4">
+                              <CardContent className="p-1 sm:p-3 md:p-6 flex flex-col h-full">
+                                <div className="flex mb-1 sm:mb-2 md:mb-4 justify-start">
                                   {Array(testimonial.rating)
                                     .fill(0)
                                     .map((_, j) => (
-                                      <Star key={j} className="size-4 text-yellow-500 fill-yellow-500" />
+                                      <Star key={j} className="size-2 sm:size-3 md:size-4 text-yellow-500 fill-yellow-500" />
                                     ))}
                                 </div>
-                                <p className="text-lg mb-6 flex-grow">{testimonial.quote}</p>
-                                <div className="flex items-center gap-4 mt-auto pt-4 border-t border-border/40">
-                                  <div className="size-10 rounded-full bg-muted flex items-center justify-center text-foreground font-medium">
+                                <p className="text-[8px] sm:text-xs md:text-lg mb-1 sm:mb-3 md:mb-6 flex-grow text-left">{testimonial.quote}</p>
+                                <div className="flex flex-row items-center gap-2 sm:gap-3 md:gap-4 mt-auto pt-1 sm:pt-2 md:pt-4 border-t border-border/40">
+                                  <div className="size-4 sm:size-6 md:size-10 rounded-full bg-muted flex items-center justify-center text-foreground font-medium text-[8px] sm:text-xs md:text-base shrink-0">
                                     {testimonial.author.charAt(0)}
                                   </div>
-                                  <div>
-                                    <p className="font-medium">{testimonial.author}</p>
-                                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                                  <div className="text-left">
+                                    <p className="text-[8px] sm:text-xs md:text-base font-medium">{testimonial.author}</p>
+                                    <p className="text-[6px] sm:text-[8px] md:text-sm text-muted-foreground">{testimonial.role}</p>
                                   </div>
                                 </div>
                               </CardContent>
@@ -951,7 +1060,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Pricing Section */}
+        {/* Pricing Section
         <section id="pricing" className="w-full py-20 md:py-32 bg-muted/30 relative overflow-hidden">
           <div className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_40%,transparent_100%)]"></div>
 
@@ -1149,7 +1258,7 @@ export default function LandingPage() {
               </Tabs>
             </div>
           </div>
-        </section>
+        </section>*/}
 
         {/* FAQ Section */}
         <section id="faq" className="w-full py-20 md:py-32">
@@ -1161,9 +1270,6 @@ export default function LandingPage() {
               transition={{ duration: 0.5 }}
               className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
             >
-              <Badge className="rounded-full px-4 py-1.5 text-sm font-medium" variant="secondary">
-                FAQ
-              </Badge>
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Questions fréquentes</h2>
               <p className="max-w-[800px] text-muted-foreground md:text-lg">
                 Voici les réponses aux questions fréquentes de nos clients.
@@ -1211,60 +1317,76 @@ export default function LandingPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="w-full py-20 md:py-32 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground relative overflow-hidden">
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:4rem_4rem]"></div>
-          <div className="absolute -top-24 -left-24 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-
-          <div className="container px-4 md:px-6 relative">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="flex flex-col items-center justify-center space-y-6 text-center"
-            >
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-                Ready to Transform Your Workflow?
-              </h2>
-              <p className="mx-auto max-w-[700px] text-primary-foreground/80 md:text-xl">
-                Join thousands of satisfied customers who have streamlined their processes and boosted productivity with
-                our platform.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 mt-4">
-                <Button size="lg" variant="secondary" className="rounded-full h-12 px-8 text-base">
-                  Start Free Trial
-                  <ArrowRight className="ml-2 size-4" />
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full h-12 px-8 text-base bg-transparent border-white text-white hover:bg-white/10"
-                >
-                  Schedule a Demo
-                </Button>
-              </div>
-              <p className="text-sm text-primary-foreground/80 mt-4">
-                No credit card required. 14-day free trial. Cancel anytime.
-              </p>
-            </motion.div>
-          </div>
+        <section className="w-full relative py-8 md:py-12 px-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{
+              duration: 0.7,
+              ease: "easeOut",
+              scale: {
+                type: "spring",
+                stiffness: 100,
+                damping: 15
+              }
+            }}
+            className="w-full max-w-[1400px] mx-auto overflow-hidden"
+            whileHover={{
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.35)"
+            }}
+          >
+            <div className="relative rounded-xl overflow-hidden shadow-2xl border border-white/10 transform transition-all duration-300 hover:translate-y-[-5px]">
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+                className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-primary/20 to-transparent z-10"
+              />
+              <Image
+                src="/pub.jpg"
+                alt="Promotion Bris de Glace - Remplacement de pare-brise gratuit"
+                width={1920}
+                height={600}
+                className="w-full h-auto object-cover"
+                priority
+              />
+              <motion.div
+                initial={{ x: -100, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.7, ease: "easeOut" }}
+                className="absolute bottom-6 left-6 md:bottom-10 md:left-10 z-20"
+              >
+                {/* <div className="bg-black/40 backdrop-blur-sm px-4 py-3 rounded-lg border border-white/20">
+                  <h3 className="text-white font-bold text-lg md:text-2xl drop-shadow-md">
+                    Promotion exceptionnelle
+                  </h3>
+                </div>*/}
+              </motion.div>
+            </div>
+          </motion.div>
         </section>
       </main>
-      <footer className="w-full border-t bg-background/95 backdrop-blur-sm">
-        <div className="container flex flex-col gap-8 px-4 py-10 md:px-6 lg:py-16">
+      <footer className="w-full border-t bg-[hsl(221,83%,53%)]/10 backdrop-blur-sm">
+        <div className="container flex flex-col gap-4 px-4 py-6 md:px-6 md:py-8">
           <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
             <div className="space-y-4">
-              <div className="flex items-center gap-2 font-bold">
-                <div className="size-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground">
-                  S
-                </div>
-                <span>SaaSify</span>
-              </div>
+          <div className="flex items-center gap-2 font-bold">
+            <div className="size-8 rounded-lg flex items-center justify-center overflow-hidden">
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={34}
+                height={34}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <span>BRIS DE GLACE</span>
+          </div>
               <p className="text-sm text-muted-foreground">
-                Streamline your workflow with our all-in-one SaaS platform. Boost productivity and scale your business.
+                Avec Bris de Glace Pro, bénéficiez d’un remplacement ou d’une réparation de pare-brise 100% gratuit, rapide et sans avance de frais. Notre équipe s’occupe de tout, où que vous soyez en France, avec un service client disponible 7j/7.
               </p>
-              <div className="flex gap-4">
+{/*              <div className="flex gap-4">
                 <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -1318,79 +1440,29 @@ export default function LandingPage() {
                   </svg>
                   <span className="sr-only">LinkedIn</span>
                 </Link>
-              </div>
+              </div> */}
             </div>
             <div className="space-y-4">
               <h4 className="text-sm font-bold">Product</h4>
               <ul className="space-y-2 text-sm">
                 <li>
+                  <Link href="#hero" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Acceuil
+                  </Link>
+                </li>
+                <li>
                   <Link href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
-                    Features
+                    Nos Services
                   </Link>
                 </li>
                 <li>
-                  <Link href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
-                    Pricing
+                  <Link href="#testimonials" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Avis de nos Clients
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    Integrations
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    API
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div className="space-y-4">
-              <h4 className="text-sm font-bold">Resources</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    Documentation
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    Guides
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    Blog
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    Support
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div className="space-y-4">
-              <h4 className="text-sm font-bold">Company</h4>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    Careers
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                    Terms of Service
+                  <Link href="#faq" className="text-muted-foreground hover:text-foreground transition-colors">
+                    Questions fréquentes
                   </Link>
                 </li>
               </ul>
@@ -1398,19 +1470,8 @@ export default function LandingPage() {
           </div>
           <div className="flex flex-col gap-4 sm:flex-row justify-between items-center border-t border-border/40 pt-8">
             <p className="text-xs text-muted-foreground">
-              &copy; {new Date().getFullYear()} SaaSify. All rights reserved.
+              &copy; {new Date().getFullYear()} BRIS DE GLACE. All rights reserved.
             </p>
-            <div className="flex gap-4">
-              <Link href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                Privacy Policy
-              </Link>
-              <Link href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                Terms of Service
-              </Link>
-              <Link href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                Cookie Policy
-              </Link>
-            </div>
           </div>
         </div>
       </footer>

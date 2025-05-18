@@ -102,7 +102,8 @@ body {
 
 /* Style pour les icônes de service */
 .icn-service {
-  filter: brightness(0) saturate(100%) invert(27%) sepia(80%) saturate(1500%) hue-rotate(210deg) brightness(91%) contrast(97%);
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%) !important;
+  color: white !important;
 }
 
 /* For selection styling */
