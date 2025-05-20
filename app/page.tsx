@@ -809,12 +809,12 @@ export default function LandingPage() {
                     variant="outline"
                     className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20"
                     onClick={() => {
-                      const message = "Bonjour, je souhaite obtenir un devis pour une réparation d'impact sur mon pare-brise.";
-                      const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE?.replace(/\+/g, '') || "33000000000";
+                      const message = "Bonjour, je souhaite obtenir plus d'informations sur une réparation d'impact sur mon pare-brise.";
+                      const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE?.replace(/\+/g, '') || "+33685041049";
                       window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
                     }}
                   >
-                    Demander un devis via WhatsApp
+                    Demander plus d'informations
                     <Image src="/icons/whatsapp.png" alt="WhatsApp" width={16} height={16} className="ml-2 size-4 invert" />
                   </Button>
                 </div>
