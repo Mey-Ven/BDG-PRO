@@ -33,12 +33,23 @@ export async function POST(request: Request) {
     const formatDetails = (details: any) => {
       if (!details || Object.keys(details).length === 0) return '';
 
+      // Traduction des clés de détails si nécessaire
+      const keyLabels: Record<string, string> = {
+        damageType: "Type de dommage",
+        positionVitre: "Position",
+        typeVitre: "Type de vitre",
+        rearWindowType: "Type de lunette arrière",
+        otherDescription: "Description détaillée"
+        // La clé "Description détaillée" est déjà en français, donc pas besoin de la traduire
+      };
+
       return Object.entries(details)
         .map(([key, value]: [string, any]) => {
+          const translatedKey = keyLabels[key] || key;
           if (typeof value === 'object' && value.label) {
-            return `<strong>${key}</strong>: ${value.label}`;
+            return `<strong>${translatedKey}</strong>: ${value.label}`;
           }
-          return `<strong>${key}</strong>: ${value}`;
+          return `<strong>${translatedKey}</strong>: ${value}`;
         })
         .join('<br>');
     };
@@ -75,10 +86,20 @@ ${data.glassType.label}
 ${data.details && Object.keys(data.details).length > 0 ? `Détails du dommage:
 ${Object.entries(data.details)
   .map(([key, value]: [string, any]) => {
+    // Traduction des clés de détails si nécessaire
+    const keyLabels: Record<string, string> = {
+      damageType: "Type de dommage",
+      positionVitre: "Position",
+      typeVitre: "Type de vitre",
+      rearWindowType: "Type de lunette arrière",
+      otherDescription: "Description détaillée"
+    };
+    const translatedKey = keyLabels[key] || key;
+
     if (typeof value === 'object' && value.label) {
-      return `${key}: ${value.label}`;
+      return `${translatedKey}: ${value.label}`;
     }
-    return `${key}: ${value}`;
+    return `${translatedKey}: ${value}`;
   })
   .join('\n')}` : ''}
     `;

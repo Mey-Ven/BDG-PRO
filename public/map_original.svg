@@ -5,32 +5,26 @@
     <style>
       .st0 {
         fill: none;
-        stroke: none;
       }
 
       .st1 {
         fill: #f1f1f1;
-        stroke: none;
       }
 
       .st2 {
         fill: #efefef;
-        stroke: none;
       }
 
       .st3 {
         fill: #f0f0f1;
-        stroke: none;
       }
 
       .st4 {
         fill: #fefefe;
-        stroke: none;
       }
 
       .st5 {
         fill: #3661e1;
-        stroke: none;
       }
     </style>
   </defs>

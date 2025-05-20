@@ -191,7 +191,7 @@ export default function CarDamageForm() {
         };
       } else if (data.glassType === "other" && data.otherDescription) {
         emailData.details = {
-          otherDescription: data.otherDescription
+          "Description détaillée": data.otherDescription
         };
       }
 
@@ -266,7 +266,7 @@ ${data.glassType === "windshield" && data.damageType ? `Type de dommage: ${getDa
 ${(data.glassType === "leftSide" || data.glassType === "rightSide") && data.positionVitre ? `Position: ${getWindowPositionLabel(data.positionVitre)}` : ''}
 ${(data.glassType === "leftSide" || data.glassType === "rightSide") && data.typeVitre ? `Type de vitre: ${getWindowTypeLabel(data.typeVitre)}` : ''}
 ${data.glassType === "rearWindow" && data.rearWindowType ? `Type de lunette arrière: ${getRearWindowTypeLabel(data.rearWindowType)}` : ''}
-${data.glassType === "other" && data.otherDescription ? `Description: ${data.otherDescription}` : ''}
+${data.glassType === "other" && data.otherDescription ? `Description détaillée: ${data.otherDescription}` : ''}
           `;
 
           toast.warning("Tentative d'envoi par email direct via votre client email...");

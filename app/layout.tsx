@@ -23,8 +23,7 @@ export const metadata: Metadata = {
   icons: {
     icon: '/Logo-ong.png',
     apple: '/Logo-ong.png',
-  },
-  generator: 'v0.dev'
+  }
 }
 
 export default function RootLayout({

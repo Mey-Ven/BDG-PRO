@@ -1387,11 +1387,8 @@ export default function LandingPage() {
                 transition={{ duration: 0.6 }}
               >
                 <div className="relative max-w-md w-full">
-                  {/* Decorative elements */}
-                  <div className="absolute -z-10 inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 blur-3xl opacity-70 rounded-full transform -translate-x-10 translate-y-10"></div>
-
-                  {/* SVG Map container with effects */}
-                  <div className="relative shadow-xl p-4">
+                  {/* SVG Map container without shadow */}
+                  <div className="relative p-4">
                     <motion.div
                       whileHover={{ scale: 1.02 }}
                       transition={{ duration: 0.3 }}
@@ -1412,12 +1409,11 @@ export default function LandingPage() {
                           />
                         </object>
 
-                        {/* Overlay for gradient effect */}
-                        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-background/40 to-transparent"></div>
+                        {/* No overlay for a cleaner look */}
 
                         {/* Label */}
                         <div className="absolute bottom-4 left-0 right-0 text-center">
-                          <span className="bg-primary/90 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg backdrop-blur-sm">
+                          <span className="bg-primary/90 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur-sm">
                             Intervention dans toute la France
                           </span>
                         </div>
