@@ -925,7 +925,57 @@ export default function LandingPage() {
               ))}
             </motion.div>
           </div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{
+              duration: 0.7,
+              ease: "easeOut",
+              scale: {
+                type: "spring",
+                stiffness: 100,
+                damping: 15
+              }
+            }}
+            className="w-full max-w-[1400px] mx-auto overflow-hidden"
+            style={{ marginTop: "50px" }}
+            whileHover={{
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.35)"
+            }}
+          >
+            <div className="relative rounded-xl overflow-hidden shadow-2xl border border-white/10 transform transition-all duration-300 hover:translate-y-[-5px]">
+              <motion.div
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+                className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-primary/20 to-transparent z-10"
+              />
+              <Image
+                src="/pub.jpg"
+                alt="Promotion Bris de Glace - Remplacement de pare-brise gratuit"
+                width={1920}
+                height={600}
+                className="w-full h-auto object-cover"
+                priority
+              />
+              <motion.div
+                initial={{ x: -100, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.7, ease: "easeOut" }}
+                className="absolute bottom-6 left-6 md:bottom-10 md:left-10 z-20"
+              >
+                {/* <div className="bg-black/40 backdrop-blur-sm px-4 py-3 rounded-lg border border-white/20">
+                  <h3 className="text-white font-bold text-lg md:text-2xl drop-shadow-md">
+                    Promotion exceptionnelle
+                  </h3>
+                </div>*/}
+              </motion.div>
+            </div>
+          </motion.div>
         </section>
+
+
 
         {/* Testimonials Section */}
         <section id="testimonials" className="w-full py-20 md:py-32">
@@ -1261,7 +1311,10 @@ export default function LandingPage() {
         </section>*/}
 
         {/* FAQ Section */}
-        <section id="faq" className="w-full py-20 md:py-32">
+        <section id="faq" className="w-full py-20 md:py-32 relative overflow-hidden">
+          {/* Background pattern */}
+          <div className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30 dark:opacity-20"></div>
+
           <div className="container px-4 md:px-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -1276,96 +1329,107 @@ export default function LandingPage() {
               </p>
             </motion.div>
 
-            <div className="mx-auto max-w-3xl">
-              <Accordion type="single" collapsible className="w-full">
-                {[
-                  {
-                    question: "Le remplacement est-il vraiment gratuit ?",
-                    answer:
-                      "Oui, si vous êtes assuré bris de glace sans franchise. Sinon, nous vous proposons un devis clair et sans surprise.",
-                  },
-                  {
-                    question: "Comment prendre rendez-vous ?",
-                    answer:
-                      "Remplissez notre formulaire en ligne ou appelez-nous. Un conseiller vous rappelle dans les 10 minutes.",
-                  },
-                  {
-                    question: " Combien de temps dure l’intervention ?",
-                    answer:
-                      "Environ 1h30. Nous vous indiquons le temps exact selon votre véhicule.",
-                  },
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              {/* FAQ Accordion */}
+              <div className="order-2 lg:order-1">
+                <Accordion type="single" collapsible className="w-full">
+                  {[
+                    {
+                      question: "Le remplacement est-il vraiment gratuit ?",
+                      answer:
+                        "Oui, si vous êtes assuré bris de glace sans franchise. Sinon, nous vous proposons un devis clair et sans surprise.",
+                    },
+                    {
+                      question: "Comment prendre rendez-vous ?",
+                      answer:
+                        "Remplissez notre formulaire en ligne ou appelez-nous. Un conseiller vous rappelle dans les 10 minutes.",
+                    },
+                    {
+                      question: " Combien de temps dure l'intervention ?",
+                      answer:
+                        "Environ 1h30. Nous vous indiquons le temps exact selon votre véhicule.",
+                    },
+                    {
+                      question: "Intervenez-vous dans toute la France ?",
+                      answer:
+                        "Oui, notre réseau de techniciens couvre l'ensemble du territoire français. Nous intervenons à domicile ou sur votre lieu de travail.",
+                    },
+                    {
+                      question: "Quels types de vitres remplacez-vous ?",
+                      answer:
+                        "Nous remplaçons tous types de vitres : pare-brise, vitres latérales, lunette arrière et toit panoramique, pour tous les modèles de véhicules.",
+                    },
+                  ].map((faq, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: i * 0.05 }}
+                    >
+                      <AccordionItem value={`item-${i}`} className="border-b border-border/40 py-2">
+                        <AccordionTrigger className="text-left font-medium hover:no-underline">
+                          {faq.question}
+                        </AccordionTrigger>
+                        <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
+                      </AccordionItem>
+                    </motion.div>
+                  ))}
+                </Accordion>
+              </div>
 
-                ].map((faq, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: i * 0.05 }}
-                  >
-                    <AccordionItem value={`item-${i}`} className="border-b border-border/40 py-2">
-                      <AccordionTrigger className="text-left font-medium hover:no-underline">
-                        {faq.question}
-                      </AccordionTrigger>
-                      <AccordionContent className="text-muted-foreground">{faq.answer}</AccordionContent>
-                    </AccordionItem>
-                  </motion.div>
-                ))}
-              </Accordion>
+              {/* France Map SVG */}
+              <motion.div
+                className="order-1 lg:order-2 flex justify-center"
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <div className="relative max-w-md w-full">
+                  {/* Decorative elements */}
+                  <div className="absolute -z-10 inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 blur-3xl opacity-70 rounded-full transform -translate-x-10 translate-y-10"></div>
+
+                  {/* SVG Map container with effects */}
+                  <div className="relative shadow-xl p-4">
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ duration: 0.3 }}
+                      className="relative"
+                    >
+                      {/* SVG Map of France with exact geographical contour */}
+                      <div className="w-full aspect-square relative">
+                        <object
+                          type="image/svg+xml"
+                          data="/map.svg"
+                          className="w-full h-full"
+                          aria-label="Carte de France - Intervention dans toute la France"
+                        >
+                          <img
+                            src="/images/Map.png"
+                            alt="Carte de France - Intervention dans toute la France"
+                            className="w-full h-auto object-contain"
+                          />
+                        </object>
+
+                        {/* Overlay for gradient effect */}
+                        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-background/40 to-transparent"></div>
+
+                        {/* Label */}
+                        <div className="absolute bottom-4 left-0 right-0 text-center">
+                          <span className="bg-primary/90 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg backdrop-blur-sm">
+                            Intervention dans toute la France
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="w-full relative py-8 md:py-12 px-4">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.7,
-              ease: "easeOut",
-              scale: {
-                type: "spring",
-                stiffness: 100,
-                damping: 15
-              }
-            }}
-            className="w-full max-w-[1400px] mx-auto overflow-hidden"
-            whileHover={{
-              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.35)"
-            }}
-          >
-            <div className="relative rounded-xl overflow-hidden shadow-2xl border border-white/10 transform transition-all duration-300 hover:translate-y-[-5px]">
-              <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-                className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-primary/20 to-transparent z-10"
-              />
-              <Image
-                src="/pub.jpg"
-                alt="Promotion Bris de Glace - Remplacement de pare-brise gratuit"
-                width={1920}
-                height={600}
-                className="w-full h-auto object-cover"
-                priority
-              />
-              <motion.div
-                initial={{ x: -100, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.7, ease: "easeOut" }}
-                className="absolute bottom-6 left-6 md:bottom-10 md:left-10 z-20"
-              >
-                {/* <div className="bg-black/40 backdrop-blur-sm px-4 py-3 rounded-lg border border-white/20">
-                  <h3 className="text-white font-bold text-lg md:text-2xl drop-shadow-md">
-                    Promotion exceptionnelle
-                  </h3>
-                </div>*/}
-              </motion.div>
-            </div>
-          </motion.div>
-        </section>
       </main>
       <footer className="w-full border-t bg-[hsl(221,83%,53%)]/10 backdrop-blur-sm">
         <div className="container flex flex-col gap-4 px-4 py-6 md:px-6 md:py-8">

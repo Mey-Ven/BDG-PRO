@@ -10,7 +10,7 @@ export default function WhatsAppButton() {
   const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "+33000000000"
 
   // Message avec emojis directement
-  const messageText = "C'est Bris de Glace Pro 👋\n\nBonne nouvelle ! Votre remplacement de pare-brise est 100% gratuit si vous êtes assuré bris de glace.\nNous nous occupons de toutes les démarches avec votre assurance, sans avance de frais 💸\n🎁 Et en plus, un cadeau vous est offert après l'intervention !\n\n📲 Pour bloquer votre rendez-vous, merci de nous envoyer rapidement une photo de votre carte grise et de votre attestation d'assurance ici sur WhatsApp.\nDès réception, on vous propose une date d'intervention selon vos disponibilités.\n\nÀ très vite ! 🚘"
+  const messageText = "C'est Bris de Glace Pro \n\nBonne nouvelle ! Votre remplacement de pare-brise est 100% gratuit si vous êtes assuré bris de glace.\nNous nous occupons de toutes les démarches avec votre assurance, sans avance de frais \n Et en plus, un cadeau vous est offert après l'intervention !\n\n Pour bloquer votre rendez-vous, merci de nous envoyer rapidement une photo de votre carte grise et de votre attestation d'assurance ici sur WhatsApp.\nDès réception, on vous propose une date d'intervention selon vos disponibilités.\n\nÀ très vite !"
 
   // Encodage correct pour WhatsApp
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(messageText)}`

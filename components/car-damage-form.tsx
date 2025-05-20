@@ -41,6 +41,7 @@ const formSchema = z.object({
     .regex(licensePlateRegex, { message: "Format invalide. Exemple: AB-123-CD" })
     .toUpperCase(),
   insurance: z.string().min(1, { message: "Veuillez sélectionner votre assurance" }),
+  customInsurance: z.string().optional(),
 
   // Address information
   address: z.string().min(5, { message: "L'adresse doit contenir au moins 5 caractères" }),
@@ -82,6 +83,7 @@ export default function CarDamageForm() {
       phone: "",
       licensePlate: "",
       insurance: "",
+      customInsurance: "",
       address: "",
       postalCode: "",
       city: "",
@@ -89,8 +91,49 @@ export default function CarDamageForm() {
     mode: "onChange" // Validation à chaque changement pour une meilleure expérience utilisateur
   })
 
-  const { watch } = form
+  const { watch, formState } = form
   const glassType = watch("glassType")
+
+  // Fonctions de validation pour chaque étape
+  const isStep1Valid = () => {
+    const { firstName, lastName, email, phone, licensePlate, insurance, customInsurance, address, postalCode, city } = form.getValues()
+    return (
+      firstName.length >= 2 &&
+      lastName.length >= 2 &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
+      phone.length >= 8 &&
+      licensePlateRegex.test(licensePlate) &&
+      insurance.length > 0 &&
+      (insurance !== "autre" || (customInsurance && customInsurance.length >= 2)) &&
+      address.length >= 5 &&
+      postalCodeRegex.test(postalCode) &&
+      city.length >= 2
+    )
+  }
+
+  const isStep2Valid = () => {
+    return !!glassType
+  }
+
+  const isStep3Valid = () => {
+    if (glassType === "windshield") {
+      return !!watch("damageType")
+    } else if (glassType === "leftSide" || glassType === "rightSide") {
+      return !!watch("positionVitre")
+    } else if (glassType === "rearWindow") {
+      return !!watch("rearWindowType")
+    } else if (glassType === "other") {
+      return (watch("otherDescription") || "").length > 0
+    }
+    return false
+  }
+
+  const isStep4Valid = () => {
+    if (glassType === "leftSide" || glassType === "rightSide") {
+      return !!watch("typeVitre")
+    }
+    return true
+  }
 
   const onSubmit = async (data: FormValues) => {
     try {
@@ -108,7 +151,7 @@ export default function CarDamageForm() {
           email: data.email, // Cet email sera utilisé comme expéditeur
           phone: data.phone,
           licensePlate: data.licensePlate,
-          insurance: data.insurance,
+          insurance: data.insurance === "autre" ? `${data.insurance} (${data.customInsurance})` : data.insurance,
           address: data.address,
           postalCode: data.postalCode,
           city: data.city
@@ -215,7 +258,7 @@ Nom: ${data.lastName}
 Email: ${data.email}
 Téléphone: ${data.phone}
 Plaque d'immatriculation: ${data.licensePlate}
-Assurance: ${data.insurance}
+Assurance: ${data.insurance === "autre" ? `${data.insurance} (${data.customInsurance})` : data.insurance}
 Adresse: ${data.address}, ${data.postalCode} ${data.city}
 
 Type de vitre: ${getGlassTypeLabel(data.glassType)}
@@ -325,13 +368,14 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
               {step === 1 && (
                 <div className="space-y-4">
                   <h2 className="text-xl font-semibold">Informations personnelles</h2>
+                  <p className="text-sm text-muted-foreground mb-4">Les champs marqués d'un <span className="text-red-500">*</span> sont obligatoires.</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="firstName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Prénom</FormLabel>
+                          <FormLabel><span className="text-red-500">*</span> Prénom</FormLabel>
                           <FormControl>
                             <Input placeholder="Jean" {...field} />
                           </FormControl>
@@ -344,7 +388,7 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                       name="lastName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Nom</FormLabel>
+                          <FormLabel><span className="text-red-500">*</span> Nom</FormLabel>
                           <FormControl>
                             <Input placeholder="Dupont" {...field} />
                           </FormControl>
@@ -359,7 +403,7 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email (sera utilisé comme expéditeur)</FormLabel>
+                        <FormLabel><span className="text-red-500">*</span> Email (sera utilisé comme expéditeur)</FormLabel>
                         <FormControl>
                           <Input type="email" placeholder="jean.dupont@example.com" {...field} />
                         </FormControl>
@@ -376,7 +420,7 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Téléphone</FormLabel>
+                        <FormLabel><span className="text-red-500">*</span> Téléphone</FormLabel>
                         <FormControl>
                           <Input type="tel" placeholder="06 12 34 56 78" {...field} />
                         </FormControl>
@@ -390,7 +434,7 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                     name="licensePlate"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Plaque d'immatriculation</FormLabel>
+                        <FormLabel><span className="text-red-500">*</span> Plaque d'immatriculation</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="AB-123-CD"
@@ -422,14 +466,34 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                     name="insurance"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Assurance</FormLabel>
+                        <FormLabel><span className="text-red-500">*</span> Assurance</FormLabel>
                         <FormControl>
                           <InsuranceSelector
                             value={field.value}
                             onChange={field.onChange}
+                            customInsurance={form.watch("customInsurance")}
+                            onCustomInsuranceChange={(value) => form.setValue("customInsurance", value, { shouldValidate: true })}
                           />
                         </FormControl>
                         <FormMessage />
+                        {field.value === "autre" && (
+                          <FormField
+                            control={form.control}
+                            name="customInsurance"
+                            render={({ field: customField }) => (
+                              <FormItem className="mt-2">
+                                <FormLabel><span className="text-red-500">*</span> Nom de votre assurance</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Saisissez le nom de votre assurance"
+                                    {...customField}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        )}
                       </FormItem>
                     )}
                   />
@@ -440,7 +504,7 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                     name="address"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Rue et numéro</FormLabel>
+                        <FormLabel><span className="text-red-500">*</span> Rue et numéro</FormLabel>
                         <FormControl>
                           <Input placeholder="123 rue de Paris" {...field} />
                         </FormControl>
@@ -455,7 +519,7 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                       name="postalCode"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Code postal</FormLabel>
+                          <FormLabel><span className="text-red-500">*</span> Code postal</FormLabel>
                           <FormControl>
                             <Input placeholder="75001" {...field} />
                           </FormControl>
@@ -468,7 +532,7 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                       name="city"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Ville</FormLabel>
+                          <FormLabel><span className="text-red-500">*</span> Ville</FormLabel>
                           <FormControl>
                             <Input placeholder="Paris" {...field} />
                           </FormControl>
@@ -478,8 +542,17 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                     />
                   </div>
                   <div className="flex justify-between">
-                    <Button type="button" variant="outline" onClick={closeForm}>Annuler</Button>
-                    <Button type="button" onClick={nextStep}>Suivant</Button>
+                    <div className="space-x-2">
+                      <Button type="button" variant="outline" onClick={closeForm}>Annuler</Button>
+                    </div>
+                    <Button
+                      type="button"
+                      onClick={nextStep}
+                      disabled={!isStep1Valid()}
+                      title={!isStep1Valid() ? "Veuillez remplir tous les champs obligatoires" : ""}
+                    >
+                      Suivant
+                    </Button>
                   </div>
                 </div>
               )}
@@ -492,7 +565,7 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                     name="glassType"
                     render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel>Quelle vitre est endommagée?</FormLabel>
+                        <FormLabel><span className="text-red-500">*</span> Quelle vitre est endommagée?</FormLabel>
                         <FormControl>
                           <RadioGroup
                             onValueChange={field.onChange}
@@ -655,7 +728,14 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                       <Button type="button" variant="outline" onClick={closeForm}>Annuler</Button>
                       <Button type="button" variant="outline" onClick={prevStep}>Précédent</Button>
                     </div>
-                    <Button type="button" onClick={nextStep}>Suivant</Button>
+                    <Button
+                      type="button"
+                      onClick={nextStep}
+                      disabled={!isStep2Valid()}
+                      title={!isStep2Valid() ? "Veuillez sélectionner un type de vitre" : ""}
+                    >
+                      Suivant
+                    </Button>
                   </div>
                 </div>
               )}
@@ -668,7 +748,7 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                     name="damageType"
                     render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel>Sélectionnez le type de dommage</FormLabel>
+                        <FormLabel><span className="text-red-500">*</span> Sélectionnez le type de dommage</FormLabel>
                         <FormControl>
                           <RadioGroup
                             onValueChange={field.onChange}
@@ -802,7 +882,13 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                       <Button type="button" variant="outline" onClick={closeForm}>Annuler</Button>
                       <Button type="button" variant="outline" onClick={prevStep}>Précédent</Button>
                     </div>
-                    <Button type="submit">Envoyer</Button>
+                    <Button
+                      type="submit"
+                      disabled={!isStep3Valid()}
+                      title={!isStep3Valid() ? "Veuillez sélectionner un type de dommage" : ""}
+                    >
+                      Envoyer
+                    </Button>
                   </div>
                 </div>
               )}
@@ -815,7 +901,7 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                     name="positionVitre"
                     render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel>Sélectionnez la position</FormLabel>
+                        <FormLabel><span className="text-red-500">*</span> Sélectionnez la position</FormLabel>
                         <FormControl>
                           <RadioGroup
                             onValueChange={field.onChange}
@@ -891,7 +977,14 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                       <Button type="button" variant="outline" onClick={closeForm}>Annuler</Button>
                       <Button type="button" variant="outline" onClick={prevStep}>Précédent</Button>
                     </div>
-                    <Button type="button" onClick={nextStep}>Suivant</Button>
+                    <Button
+                      type="button"
+                      onClick={nextStep}
+                      disabled={!isStep3Valid()}
+                      title={!isStep3Valid() ? "Veuillez sélectionner la position de la vitre" : ""}
+                    >
+                      Suivant
+                    </Button>
                   </div>
                 </div>
               )}
@@ -904,7 +997,7 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                     name="typeVitre"
                     render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel>Sélectionnez le type de vitre</FormLabel>
+                        <FormLabel><span className="text-red-500">*</span> Sélectionnez le type de vitre</FormLabel>
                         <FormControl>
                           <RadioGroup
                             onValueChange={field.onChange}
@@ -982,7 +1075,13 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                       <Button type="button" variant="outline" onClick={closeForm}>Annuler</Button>
                       <Button type="button" variant="outline" onClick={prevStep}>Précédent</Button>
                     </div>
-                    <Button type="submit">Envoyer</Button>
+                    <Button
+                      type="submit"
+                      disabled={!isStep4Valid()}
+                      title={!isStep4Valid() ? "Veuillez sélectionner le type de vitre" : ""}
+                    >
+                      Envoyer
+                    </Button>
                   </div>
                 </div>
               )}
@@ -995,7 +1094,7 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                     name="rearWindowType"
                     render={({ field }) => (
                       <FormItem className="space-y-3">
-                        <FormLabel>Précisez quelle lunette arrière</FormLabel>
+                        <FormLabel><span className="text-red-500">*</span> Précisez quelle lunette arrière</FormLabel>
                         <FormControl>
                           <RadioGroup
                             onValueChange={field.onChange}
@@ -1073,7 +1172,13 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                       <Button type="button" variant="outline" onClick={closeForm}>Annuler</Button>
                       <Button type="button" variant="outline" onClick={prevStep}>Précédent</Button>
                     </div>
-                    <Button type="submit">Envoyer</Button>
+                    <Button
+                      type="submit"
+                      disabled={!isStep3Valid()}
+                      title={!isStep3Valid() ? "Veuillez sélectionner le type de lunette arrière" : ""}
+                    >
+                      Envoyer
+                    </Button>
                   </div>
                 </div>
               )}
@@ -1086,7 +1191,7 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                     name="otherDescription"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Veuillez préciser les détails du dommage:</FormLabel>
+                        <FormLabel><span className="text-red-500">*</span> Veuillez préciser les détails du dommage:</FormLabel>
                         <FormControl>
                           <textarea
                             className="w-full p-2 border rounded-md min-h-[100px]"
@@ -1103,7 +1208,13 @@ ${data.glassType === "other" && data.otherDescription ? `Description: ${data.oth
                       <Button type="button" variant="outline" onClick={closeForm}>Annuler</Button>
                       <Button type="button" variant="outline" onClick={prevStep}>Précédent</Button>
                     </div>
-                    <Button type="submit">Envoyer</Button>
+                    <Button
+                      type="submit"
+                      disabled={!isStep3Valid()}
+                      title={!isStep3Valid() ? "Veuillez décrire les vitres endommagées" : ""}
+                    >
+                      Envoyer
+                    </Button>
                   </div>
                 </div>
               )}
