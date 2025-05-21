@@ -140,8 +140,9 @@ export async function GET(request: NextRequest) {
     // Calculer les statistiques par type de formulaire
     const formTypeCounts: Record<string, number> = {};
     submissions.forEach(submission => {
-      const type = submission.formType === 'carDamage' ? 'Dommage vitre' : 'Partenaire';
-      formTypeCounts[type] = (formTypeCounts[type] || 0) + 1;
+      if (submission.formType === 'carDamage') {
+        formTypeCounts['Dommage vitre'] = (formTypeCounts['Dommage vitre'] || 0) + 1;
+      }
     });
 
     const formTypeStats = Object.entries(formTypeCounts).map(([type, count]) => ({
@@ -150,20 +151,18 @@ export async function GET(request: NextRequest) {
     }));
 
     // Calculer les statistiques mensuelles
-    const monthlyData: Record<string, { carDamage: number, partner: number, total: number }> = {};
+    const monthlyData: Record<string, { carDamage: number, total: number }> = {};
 
     submissions.forEach(submission => {
       const date = new Date(submission.createdAt);
       const monthYear = `${date.toLocaleString('fr-FR', { month: 'short' })}`;
 
       if (!monthlyData[monthYear]) {
-        monthlyData[monthYear] = { carDamage: 0, partner: 0, total: 0 };
+        monthlyData[monthYear] = { carDamage: 0, total: 0 };
       }
 
       if (submission.formType === 'carDamage') {
         monthlyData[monthYear].carDamage += 1;
-      } else {
-        monthlyData[monthYear].partner += 1;
       }
 
       monthlyData[monthYear].total += 1;

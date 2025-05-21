@@ -9,16 +9,17 @@ export const ADMIN_EMAIL = 'mhmd.bdg.pro1@brisdeglacepro.com'; // Remplacez par 
  * @param request La requête Next.js
  * @returns Un objet avec le statut de l'authentification et éventuellement une réponse d'erreur
  */
-export function checkMainAdminAuth(request: NextRequest): { 
-  isAuthorized: boolean; 
+export function checkMainAdminAuth(request: NextRequest): {
+  isAuthorized: boolean;
   errorResponse?: NextResponse;
   user?: any;
 } {
   // Récupérer l'utilisateur actuel
   const user = getCurrentUser(request);
-  
-  // Vérifier si l'utilisateur est connecté, est admin et a l'email de l'administrateur principal
-  if (!user || !user.isAdmin || user.email !== ADMIN_EMAIL) {
+
+  // Vérifier si l'utilisateur est connecté et est admin
+  // Note: Nous avons supprimé la vérification de l'email pour permettre à tous les administrateurs d'accéder
+  if (!user || !user.isAdmin) {
     return {
       isAuthorized: false,
       errorResponse: NextResponse.json(
@@ -27,7 +28,7 @@ export function checkMainAdminAuth(request: NextRequest): {
       )
     };
   }
-  
+
   // L'utilisateur est l'administrateur principal
   return {
     isAuthorized: true,

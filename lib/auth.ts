@@ -40,12 +40,32 @@ export function hashPassword(password: string): string {
 
 // Function to compare password with hash
 export function comparePasswords(password: string, storedHash: string): boolean {
-  // Séparer le sel et le hachage
-  const [salt, hash] = storedHash.split(':');
-  // Hacher le mot de passe fourni avec le même sel
-  const calculatedHash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
-  // Comparer les hachages
-  return hash === calculatedHash;
+  try {
+    // Séparer le sel et le hachage
+    const [salt, hash] = storedHash.split(':');
+
+    if (!salt || !hash) {
+      console.error("Format de hachage invalide:", storedHash);
+      return false;
+    }
+
+    // Hacher le mot de passe fourni avec le même sel
+    const calculatedHash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+
+    // Comparer les hachages
+    const result = hash === calculatedHash;
+    console.log("Comparaison des mots de passe:", {
+      result,
+      passwordLength: password.length,
+      hashLength: hash.length,
+      calculatedHashLength: calculatedHash.length
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Erreur lors de la comparaison des mots de passe:", error);
+    return false;
+  }
 }
 
 // Function to create a simple token (base64 encoded)

@@ -25,7 +25,10 @@ export default function LoginPage() {
   // Redirect if already logged in
   useEffect(() => {
     if (user && !isLoading) {
-      if (user.isAdmin && user.email === "mhmd.bdg.pro1@brisdeglacepro.com" && redirectPath === "/admin") {
+      console.log("Utilisateur connecté:", user)
+      console.log("Chemin de redirection:", redirectPath)
+
+      if (user.isAdmin && redirectPath === "/admin") {
         console.log("Admin user detected, redirecting to /admin")
         router.push("/admin")
       } else if (redirectPath) {

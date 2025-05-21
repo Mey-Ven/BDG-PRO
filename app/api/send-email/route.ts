@@ -15,13 +15,21 @@ export async function POST(request: Request) {
 
     // Vérifier si un code de référence est présent
     let agentId = null;
+    let validReferralCode = null;
+
     if (data.referralCode) {
+      console.log(`Code de référence reçu: ${data.referralCode}`);
       // Récupérer l'agent correspondant au code de référence
       const agent = await getAgentByReferralCode(data.referralCode);
       if (agent && agent.active) {
         agentId = agent.id;
-        console.log(`Référence trouvée pour l'agent: ${agent.name} (${agent.id})`);
+        validReferralCode = data.referralCode;
+        console.log(`Référence valide trouvée pour l'agent: ${agent.name} (${agent.id})`);
+      } else {
+        console.log(`Code de référence invalide ou agent inactif: ${data.referralCode}`);
       }
+    } else {
+      console.log('Aucun code de référence fourni');
     }
 
     // Format the email content for better readability
@@ -70,21 +78,21 @@ export async function POST(request: Request) {
     // Prepare the email content
     const emailSubject = data.subject || `Nouveau signalement de ${data.clientInfo.firstName} ${data.clientInfo.lastName}`;
 
-    // Récupérer les informations de l'agent si un code de référence est présent
+    // Récupérer les informations de l'agent si un code de référence valide est présent
     let agentInfoText = '';
     let agentInfoHtml = '';
 
-    if (agentId) {
+    if (agentId && validReferralCode) {
       const agent = await prisma.agent.findUnique({
         where: { id: agentId },
       });
 
       if (agent) {
-        agentInfoText = `\nRéféré par: ${agent.name} (Code: ${data.referralCode})`;
+        agentInfoText = `\nRéféré par: ${agent.name} (Code: ${validReferralCode})`;
         agentInfoHtml = `
     <div class="info-section">
       <h2>Référence</h2>
-      <p><strong>Agent:</strong> ${agent.name} <br><strong>Code:</strong> ${data.referralCode}</p>
+      <p><strong>Agent:</strong> ${agent.name} <br><strong>Code:</strong> ${validReferralCode}</p>
     </div>`;
       }
     }
@@ -201,24 +209,27 @@ ${Object.entries(data.details)
 
         console.log("Email envoyé avec succès via Nodemailer");
 
-        // Enregistrer la soumission dans la base de données si un agent est associé
-        if (agentId) {
-          try {
-            // Créer une entrée dans la table FormSubmission
-            await prisma.formSubmission.create({
-              data: {
-                formType: 'carDamage',
-                formData: JSON.stringify(data),
-                agentId: agentId,
-                referralCode: data.referralCode,
-              },
-            });
+        // Enregistrer la soumission dans la base de données, qu'elle ait un agent associé ou non
+        try {
+          // Extraire les informations du client à partir des données du formulaire
+          const clientInfo = data.clientInfo || {};
 
-            console.log(`Soumission enregistrée pour l'agent ID: ${agentId}`);
-          } catch (dbError) {
-            console.error("Erreur lors de l'enregistrement de la soumission:", dbError);
-            // Ne pas bloquer l'envoi de l'email si l'enregistrement échoue
-          }
+          // Créer une entrée dans la table FormSubmission
+          const submission = await prisma.formSubmission.create({
+            data: {
+              formType: 'carDamage',
+              formData: JSON.stringify(data),
+              // Si un agent est associé, inclure son ID
+              ...(agentId ? { agentId: agentId } : {}),
+              // Inclure le code de référence UNIQUEMENT s'il est valide
+              ...(validReferralCode ? { referralCode: validReferralCode } : {}),
+            },
+          });
+
+          console.log(`Soumission enregistrée avec succès, ID: ${submission.id}, ${agentId ? `pour l'agent ID: ${agentId}` : 'sans agent référent'}`);
+        } catch (dbError) {
+          console.error("Erreur lors de l'enregistrement de la soumission:", dbError);
+          // Ne pas bloquer l'envoi de l'email si l'enregistrement échoue
         }
       } catch (emailError) {
         console.error("Erreur lors de l'envoi d'email avec Nodemailer:", emailError);

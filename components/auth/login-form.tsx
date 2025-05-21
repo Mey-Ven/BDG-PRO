@@ -44,12 +44,16 @@ export default function LoginForm() {
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true)
     try {
+      console.log("Tentative de connexion avec:", data.email)
       const result = await login(data.email, data.password)
+      console.log("Résultat de la connexion:", result)
       if (result.success) {
         // La redirection est maintenant gérée par la page de connexion
         // en fonction du paramètre redirect dans l'URL
         console.log("Connexion réussie, la redirection sera gérée par la page de connexion")
       }
+    } catch (error) {
+      console.error("Erreur lors de la connexion:", error)
     } finally {
       setIsSubmitting(false)
     }

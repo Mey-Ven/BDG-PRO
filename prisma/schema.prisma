@@ -6,11 +6,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
-  // Utilisez les lignes suivantes si vous déployez sur Vercel avec une base de données PostgreSQL
-  // directConnectionAllowed = true
-  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL") // Optionnel: pour les migrations en production
+  // Note: SQLite est utilisé pour le développement
+  // Pour la production, vous devriez utiliser PostgreSQL
 }
 
 // User model for authentication

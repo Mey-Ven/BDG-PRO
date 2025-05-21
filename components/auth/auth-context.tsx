@@ -59,6 +59,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string): Promise<{ success: boolean; user?: User }> => {
     setIsLoading(true)
     try {
+      console.log("Envoi de la requête de connexion pour:", email)
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
@@ -67,9 +68,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ email, password }),
       })
 
+      console.log("Statut de la réponse:", response.status)
       const data = await response.json()
+      console.log("Données de réponse:", data)
 
       if (!response.ok) {
+        console.error("Erreur de connexion:", data.message)
         toast.error(data.message || 'Échec de la connexion')
         return { success: false }
       }

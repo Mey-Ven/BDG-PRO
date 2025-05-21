@@ -59,6 +59,13 @@ export async function GET(request: NextRequest) {
 
     console.log(`API: Found ${submissions.length} submissions`);
 
+    // Compter les soumissions avec et sans agent référent
+    const withAgent = submissions.filter(s => s.agent !== null).length;
+    const withReferralCode = submissions.filter(s => s.referralCode !== null && s.agent === null).length;
+    const withoutReferral = submissions.filter(s => s.agent === null && s.referralCode === null).length;
+
+    console.log(`API: Submissions breakdown - With agent: ${withAgent}, With referral code only: ${withReferralCode}, Without referral: ${withoutReferral}`);
+
     return NextResponse.json({
       success: true,
       submissions,
