@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { sendEmail } from '@/lib/email';
+import { getAgentByReferralCode } from '@/lib/referral';
+import prisma from '@/lib/prisma';
 
 // Configuration pour l'envoi d'emails
 const EMAIL_TO = process.env.EMAIL_TO || 'destination@example.com';
@@ -10,6 +12,17 @@ export async function POST(request: Request) {
 
     // Log the received data
     console.log('Email data received:', data);
+
+    // Vérifier si un code de référence est présent
+    let agentId = null;
+    if (data.referralCode) {
+      // Récupérer l'agent correspondant au code de référence
+      const agent = await getAgentByReferralCode(data.referralCode);
+      if (agent && agent.active) {
+        agentId = agent.id;
+        console.log(`Référence trouvée pour l'agent: ${agent.name} (${agent.id})`);
+      }
+    }
 
     // Format the email content for better readability
     const formatClientInfo = (info: any) => {
@@ -57,6 +70,25 @@ export async function POST(request: Request) {
     // Prepare the email content
     const emailSubject = data.subject || `Nouveau signalement de ${data.clientInfo.firstName} ${data.clientInfo.lastName}`;
 
+    // Récupérer les informations de l'agent si un code de référence est présent
+    let agentInfoText = '';
+    let agentInfoHtml = '';
+
+    if (agentId) {
+      const agent = await prisma.agent.findUnique({
+        where: { id: agentId },
+      });
+
+      if (agent) {
+        agentInfoText = `\nRéféré par: ${agent.name} (Code: ${data.referralCode})`;
+        agentInfoHtml = `
+    <div class="info-section">
+      <h2>Référence</h2>
+      <p><strong>Agent:</strong> ${agent.name} <br><strong>Code:</strong> ${data.referralCode}</p>
+    </div>`;
+      }
+    }
+
     // Version texte de l'email
     const emailText = `
 Nouveau signalement de dommage de vitre
@@ -82,6 +114,7 @@ ${Object.entries(data.clientInfo)
 
 Type de vitre:
 ${data.glassType.label}
+${agentInfoText}
 
 ${data.details && Object.keys(data.details).length > 0 ? `Détails du dommage:
 ${Object.entries(data.details)
@@ -137,6 +170,8 @@ ${Object.entries(data.details)
       <p>${formatDetails(data.details)}</p>
     </div>
     ` : ''}
+
+    ${agentInfoHtml}
   </div>
 </body>
 </html>
@@ -165,6 +200,26 @@ ${Object.entries(data.details)
         }
 
         console.log("Email envoyé avec succès via Nodemailer");
+
+        // Enregistrer la soumission dans la base de données si un agent est associé
+        if (agentId) {
+          try {
+            // Créer une entrée dans la table FormSubmission
+            await prisma.formSubmission.create({
+              data: {
+                formType: 'carDamage',
+                formData: JSON.stringify(data),
+                agentId: agentId,
+                referralCode: data.referralCode,
+              },
+            });
+
+            console.log(`Soumission enregistrée pour l'agent ID: ${agentId}`);
+          } catch (dbError) {
+            console.error("Erreur lors de l'enregistrement de la soumission:", dbError);
+            // Ne pas bloquer l'envoi de l'email si l'enregistrement échoue
+          }
+        }
       } catch (emailError) {
         console.error("Erreur lors de l'envoi d'email avec Nodemailer:", emailError);
         throw emailError;

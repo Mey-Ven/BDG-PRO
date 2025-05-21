@@ -7,6 +7,7 @@ import "@/styles/loading.css"
 import { Inter } from "next/font/google"
 import type { Metadata } from "next"
 import { ThemeProvider } from "@/components/theme-provider"
+import { AuthProvider } from "@/components/auth/auth-context"
 import WhatsAppButton from "@/components/whatsapp-button-new-fixed"
 import CarDamageForm from "@/components/car-damage-form"
 import { CarDamageFormProvider } from "@/components/car-damage-form-context"
@@ -38,16 +39,18 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <CarDamageFormProvider>
-            <PartnerFormProvider>
-              {children}
-              <WhatsAppButton />
-              <CarDamageForm />
-              <PartnerForm />
-              <Toaster />
-              <SmoothScroll />
-            </PartnerFormProvider>
-          </CarDamageFormProvider>
+          <AuthProvider>
+            <CarDamageFormProvider>
+              <PartnerFormProvider>
+                {children}
+                <WhatsAppButton />
+                <CarDamageForm />
+                <PartnerForm />
+                <Toaster />
+                <SmoothScroll />
+              </PartnerFormProvider>
+            </CarDamageFormProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

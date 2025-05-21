@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // Utilisez les lignes suivantes si vous déployez sur Vercel avec une base de données PostgreSQL
+  // directConnectionAllowed = true
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL") // Optionnel: pour les migrations en production
+}
+
+// User model for authentication
+model User {
+  id             String           @id @default(uuid())
+  email          String           @unique
+  password       String
+  firstName      String?
+  lastName       String?
+  phone          String?
+  isAdmin        Boolean          @default(false)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  formSubmissions FormSubmission[]
+}
+
+// Agent model for referral tracking
+model Agent {
+  id             String           @id @default(uuid())
+  name           String
+  email          String           @unique
+  phone          String?
+  referralCode   String           @unique
+  active         Boolean          @default(true)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  formSubmissions FormSubmission[]
+}
+
+// Form submission model to track submissions by users
+model FormSubmission {
+  id             String   @id @default(uuid())
+  userId         String?
+  user           User?    @relation(fields: [userId], references: [id])
+  agentId        String?
+  agent          Agent?   @relation(fields: [agentId], references: [id])
+  referralCode   String?  // Store the referral code directly for easier querying
+  formType       String   // "carDamage" or "partner"
+  formData       String   // JSON string of form data
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}

@@ -72,7 +72,7 @@ type FormValues = z.infer<typeof formSchema>
 
 export default function CarDamageForm() {
   const [step, setStep] = useState(1)
-  const { isOpen, closeForm } = useCarDamageForm()
+  const { isOpen, closeForm, referralCode } = useCarDamageForm()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -160,7 +160,8 @@ export default function CarDamageForm() {
           type: data.glassType,
           label: getGlassTypeLabel(data.glassType)
         },
-        details: {}
+        details: {},
+        referralCode: referralCode // Ajouter le code de référence s'il existe
       };
 
       // Add conditional fields based on glass type
