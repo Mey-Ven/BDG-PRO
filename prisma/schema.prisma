@@ -6,10 +6,11 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
-  // Note: SQLite est utilisé pour le développement
-  // Pour la production, vous devriez utiliser PostgreSQL
+  // Utilisez les lignes suivantes si vous déployez sur un service qui le nécessite
+  // directConnectionAllowed = true
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL") // Optionnel: pour les migrations en production
 }
 
 // User model for authentication

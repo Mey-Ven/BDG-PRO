@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getCurrentUser } from './auth';
 
 // Email de l'administrateur principal
-export const ADMIN_EMAIL = 'mhmd.bdg.pro1@brisdeglacepro.com'; // Remplacez par l'email de votre administrateur principal
+export const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'mhmd.bdg.pro1@brisdeglacepro.com';
 
 /**
  * Vérifie si l'utilisateur est l'administrateur principal

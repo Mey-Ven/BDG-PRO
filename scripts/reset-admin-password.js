@@ -27,7 +27,8 @@ async function resetAdminPassword() {
   }
 
   const newPassword = process.argv[2];
-  const adminEmail = 'mhmd.bdg.pro1@brisdeglacepro.com';
+  // Utiliser la variable d'environnement ADMIN_EMAIL ou une valeur par défaut
+  const adminEmail = process.env.ADMIN_EMAIL || 'mhmd.bdg.pro1@brisdeglacepro.com';
 
   try {
     // Vérifier si l'administrateur existe
