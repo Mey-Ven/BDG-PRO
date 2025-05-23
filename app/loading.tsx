@@ -13,6 +13,7 @@ export default function Loading() {
 
   useEffect(() => {
     setMounted(true)
+    
     // Simulate repair completion after 3 seconds
     const timer = setTimeout(() => {
       setRepairComplete(true)
