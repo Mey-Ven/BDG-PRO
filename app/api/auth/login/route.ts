@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify password
-    const isPasswordValid = comparePasswords(result.data.password, user.password);
+    const isPasswordValid = await comparePasswords(result.data.password, user.password);
     console.log("API: Mot de passe valide:", isPasswordValid ? "Oui" : "Non");
 
     if (!isPasswordValid) {

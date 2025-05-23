@@ -16,7 +16,7 @@ const updateUserSchema = z.object({
 // GET - Récupérer un utilisateur par ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Vérifier si l'utilisateur est l'administrateur principal
@@ -26,7 +26,7 @@ export async function GET(
       return errorResponse;
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     // Récupérer l'utilisateur
     const targetUser = await prisma.user.findUnique({
@@ -69,7 +69,7 @@ export async function GET(
 // PATCH - Mettre à jour un utilisateur
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Vérifier si l'utilisateur est l'administrateur principal
@@ -79,7 +79,7 @@ export async function PATCH(
       return errorResponse;
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     // Valider les données
     const body = await request.json();
@@ -126,7 +126,7 @@ export async function PATCH(
 
     // Si un nouveau mot de passe est fourni, le hacher
     if (result.data.password) {
-      updateData.password = hashPassword(result.data.password);
+      updateData.password = await hashPassword(result.data.password);
     }
 
     // Mettre à jour l'utilisateur
@@ -165,7 +165,7 @@ export async function PATCH(
 // DELETE - Supprimer un utilisateur
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Vérifier si l'utilisateur est l'administrateur principal
@@ -175,7 +175,7 @@ export async function DELETE(
       return errorResponse;
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     // Vérifier si l'utilisateur existe
     const existingUser = await prisma.user.findUnique({

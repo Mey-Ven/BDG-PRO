@@ -1,7 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import crypto from 'crypto';
 import prisma from './prisma';
 
 // Schema for user registration
@@ -28,18 +27,50 @@ export type JWTPayload = {
   isAdmin?: boolean;
 };
 
-// Function to hash password using native crypto
-export function hashPassword(password: string): string {
+// Function to hash password using Web Crypto API
+export async function hashPassword(password: string): Promise<string> {
   // Générer un sel aléatoire
-  const salt = crypto.randomBytes(16).toString('hex');
-  // Hacher le mot de passe avec le sel
-  const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+  const saltArray = new Uint8Array(16);
+  crypto.getRandomValues(saltArray);
+  const salt = Array.from(saltArray).map(b => b.toString(16).padStart(2, '0')).join('');
+
+  // Encoder le mot de passe et le sel
+  const encoder = new TextEncoder();
+  const passwordData = encoder.encode(password);
+  const saltData = encoder.encode(salt);
+
+  // Importer la clé pour PBKDF2
+  const keyMaterial = await crypto.subtle.importKey(
+    'raw',
+    passwordData,
+    { name: 'PBKDF2' },
+    false,
+    ['deriveBits']
+  );
+
+  // Dériver la clé
+  const derivedBits = await crypto.subtle.deriveBits(
+    {
+      name: 'PBKDF2',
+      salt: saltData,
+      iterations: 1000,
+      hash: 'SHA-512'
+    },
+    keyMaterial,
+    512 // 64 bytes * 8 bits
+  );
+
+  // Convertir en hex
+  const hash = Array.from(new Uint8Array(derivedBits))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+
   // Retourner le sel et le hachage séparés par un deux-points
   return `${salt}:${hash}`;
 }
 
 // Function to compare password with hash
-export function comparePasswords(password: string, storedHash: string): boolean {
+export async function comparePasswords(password: string, storedHash: string): Promise<boolean> {
   try {
     // Séparer le sel et le hachage
     const [salt, hash] = storedHash.split(':');
@@ -49,8 +80,36 @@ export function comparePasswords(password: string, storedHash: string): boolean 
       return false;
     }
 
-    // Hacher le mot de passe fourni avec le même sel
-    const calculatedHash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+    // Encoder le mot de passe et le sel
+    const encoder = new TextEncoder();
+    const passwordData = encoder.encode(password);
+    const saltData = encoder.encode(salt);
+
+    // Importer la clé pour PBKDF2
+    const keyMaterial = await crypto.subtle.importKey(
+      'raw',
+      passwordData,
+      { name: 'PBKDF2' },
+      false,
+      ['deriveBits']
+    );
+
+    // Dériver la clé
+    const derivedBits = await crypto.subtle.deriveBits(
+      {
+        name: 'PBKDF2',
+        salt: saltData,
+        iterations: 1000,
+        hash: 'SHA-512'
+      },
+      keyMaterial,
+      512 // 64 bytes * 8 bits
+    );
+
+    // Convertir en hex
+    const calculatedHash = Array.from(new Uint8Array(derivedBits))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
 
     // Comparer les hachages
     const result = hash === calculatedHash;
@@ -132,8 +191,8 @@ export function getCurrentUser(request: NextRequest): JWTPayload | null {
 }
 
 // Function to get current user from cookies (for server components)
-export function getCurrentUserFromCookies(): JWTPayload | null {
-  const cookieStore = cookies();
+export async function getCurrentUserFromCookies(): Promise<JWTPayload | null> {
+  const cookieStore = await cookies();
   const token = cookieStore.get('auth-token')?.value;
   if (!token) return null;
 
@@ -149,7 +208,7 @@ export async function getUserByEmail(email: string) {
 
 // Function to create a new user
 export async function createUser(data: z.infer<typeof registerSchema>) {
-  const hashedPassword = hashPassword(data.password);
+  const hashedPassword = await hashPassword(data.password);
 
   return prisma.user.create({
     data: {

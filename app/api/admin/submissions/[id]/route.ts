@@ -5,21 +5,21 @@ import prisma from '@/lib/prisma';
 // GET - Récupérer une soumission par ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Vérifier si l'utilisateur est administrateur
     const user = getCurrentUser(request);
-    
+
     if (!user || !user.isAdmin) {
       return NextResponse.json(
         { success: false, message: 'Accès non autorisé' },
         { status: 403 }
       );
     }
-    
-    const { id } = params;
-    
+
+    const { id } = await params;
+
     // Récupérer la soumission
     const submission = await prisma.formSubmission.findUnique({
       where: { id },
@@ -41,14 +41,14 @@ export async function GET(
         }
       }
     });
-    
+
     if (!submission) {
       return NextResponse.json(
         { success: false, message: 'Soumission non trouvée' },
         { status: 404 }
       );
     }
-    
+
     return NextResponse.json({
       success: true,
       submission,
@@ -69,38 +69,38 @@ export async function GET(
 // DELETE - Supprimer une soumission
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Vérifier si l'utilisateur est administrateur
     const user = getCurrentUser(request);
-    
+
     if (!user || !user.isAdmin) {
       return NextResponse.json(
         { success: false, message: 'Accès non autorisé' },
         { status: 403 }
       );
     }
-    
-    const { id } = params;
-    
+
+    const { id } = await params;
+
     // Vérifier si la soumission existe
     const existingSubmission = await prisma.formSubmission.findUnique({
       where: { id },
     });
-    
+
     if (!existingSubmission) {
       return NextResponse.json(
         { success: false, message: 'Soumission non trouvée' },
         { status: 404 }
       );
     }
-    
+
     // Supprimer la soumission
     await prisma.formSubmission.delete({
       where: { id },
     });
-    
+
     return NextResponse.json({
       success: true,
       message: 'Soumission supprimée avec succès',

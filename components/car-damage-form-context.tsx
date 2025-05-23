@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react"
+import React, { createContext, useContext, useState, useEffect, ReactNode, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 
 interface CarDamageFormContextType {
@@ -13,7 +13,7 @@ interface CarDamageFormContextType {
 
 const CarDamageFormContext = createContext<CarDamageFormContextType | undefined>(undefined)
 
-export function CarDamageFormProvider({ children }: { children: ReactNode }) {
+function CarDamageFormProviderContent({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false)
   const [referralCode, setReferralCode] = useState<string | null>(null)
   const searchParams = useSearchParams()
@@ -63,6 +63,24 @@ export function CarDamageFormProvider({ children }: { children: ReactNode }) {
     <CarDamageFormContext.Provider value={{ isOpen, openForm, closeForm, referralCode, clearReferralCode }}>
       {children}
     </CarDamageFormContext.Provider>
+  )
+}
+
+export function CarDamageFormProvider({ children }: { children: ReactNode }) {
+  return (
+    <Suspense fallback={
+      <CarDamageFormContext.Provider value={{
+        isOpen: false,
+        openForm: () => {},
+        closeForm: () => {},
+        referralCode: null,
+        clearReferralCode: () => {}
+      }}>
+        {children}
+      </CarDamageFormContext.Provider>
+    }>
+      <CarDamageFormProviderContent>{children}</CarDamageFormProviderContent>
+    </Suspense>
   )
 }
 

@@ -6,7 +6,7 @@ import prisma from '@/lib/prisma';
 // GET - Récupérer les statistiques d'un agent spécifique
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Vérifier si l'utilisateur est administrateur
@@ -19,7 +19,7 @@ export async function GET(
       );
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     // Vérifier si l'agent existe
     const agent = await prisma.agent.findUnique({

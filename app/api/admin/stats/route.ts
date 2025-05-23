@@ -53,8 +53,8 @@ export async function GET(request: NextRequest) {
     let totalSubmissions = 0;
     let totalUsers = 0;
     let totalAgents = 0;
-    let agents = [];
-    let submissions = [];
+    let agents: any[] = [];
+    let submissions: any[] = [];
 
     try {
       // Nombre total de soumissions

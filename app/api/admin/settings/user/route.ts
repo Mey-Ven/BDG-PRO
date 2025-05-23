@@ -35,11 +35,11 @@ const userSettingsSchema = z.object({
 export async function GET(request: NextRequest) {
   try {
     console.log('API: Fetching user settings...');
-    
+
     // Vérifier si l'utilisateur est connecté
     const user = getCurrentUser(request);
     console.log('API: User authenticated:', user ? 'yes' : 'no');
-    
+
     if (!user) {
       console.log('API: Access denied - not authenticated');
       return NextResponse.json(
@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
         { status: 403 }
       );
     }
-    
+
     // Récupérer les informations de l'utilisateur
     const userData = await prisma.user.findUnique({
       where: { id: user.id },
@@ -57,14 +57,14 @@ export async function GET(request: NextRequest) {
         email: true,
       }
     });
-    
+
     if (!userData) {
       return NextResponse.json(
         { success: false, message: 'Utilisateur non trouvé' },
         { status: 404 }
       );
     }
-    
+
     return NextResponse.json({
       success: true,
       settings: {
@@ -90,11 +90,11 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     console.log('API: Saving user settings...');
-    
+
     // Vérifier si l'utilisateur est connecté
     const user = getCurrentUser(request);
     console.log('API: User authenticated:', user ? 'yes' : 'no');
-    
+
     if (!user) {
       console.log('API: Access denied - not authenticated');
       return NextResponse.json(
@@ -102,22 +102,22 @@ export async function POST(request: NextRequest) {
         { status: 403 }
       );
     }
-    
+
     // Valider les données
     const body = await request.json();
     const result = userSettingsSchema.safeParse(body);
-    
+
     if (!result.success) {
       return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Validation failed', 
-          errors: result.error.errors 
-        }, 
+        {
+          success: false,
+          message: 'Validation failed',
+          errors: result.error.errors
+        },
         { status: 400 }
       );
     }
-    
+
     // Récupérer l'utilisateur actuel
     const currentUser = await prisma.user.findUnique({
       where: { id: user.id },
@@ -125,14 +125,14 @@ export async function POST(request: NextRequest) {
         password: true,
       }
     });
-    
+
     if (!currentUser) {
       return NextResponse.json(
         { success: false, message: 'Utilisateur non trouvé' },
         { status: 404 }
       );
     }
-    
+
     // Vérifier le mot de passe actuel si un nouveau mot de passe est fourni
     if (result.data.newPassword) {
       if (!result.data.currentPassword) {
@@ -141,9 +141,9 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
-      
-      const isPasswordValid = comparePasswords(result.data.currentPassword, currentUser.password);
-      
+
+      const isPasswordValid = await comparePasswords(result.data.currentPassword, currentUser.password);
+
       if (!isPasswordValid) {
         return NextResponse.json(
           { success: false, message: 'Mot de passe actuel incorrect' },
@@ -151,18 +151,18 @@ export async function POST(request: NextRequest) {
         );
       }
     }
-    
+
     // Préparer les données à mettre à jour
     const updateData: any = {
       firstName: result.data.firstName,
       lastName: result.data.lastName,
     };
-    
+
     // Mettre à jour le mot de passe si un nouveau est fourni
     if (result.data.newPassword) {
-      updateData.password = hashPassword(result.data.newPassword);
+      updateData.password = await hashPassword(result.data.newPassword);
     }
-    
+
     // Mettre à jour l'utilisateur
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
@@ -174,7 +174,7 @@ export async function POST(request: NextRequest) {
         email: true,
       }
     });
-    
+
     return NextResponse.json({
       success: true,
       message: 'Paramètres utilisateur sauvegardés avec succès',

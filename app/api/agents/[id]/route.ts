@@ -14,7 +14,7 @@ const updateAgentSchema = z.object({
 // GET - Récupérer un agent par ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Vérifier si l'utilisateur est administrateur
@@ -27,7 +27,7 @@ export async function GET(
       );
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     // Récupérer l'agent
     const agent = await prisma.agent.findUnique({
@@ -61,7 +61,7 @@ export async function GET(
 // PATCH - Mettre à jour un agent
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Vérifier si l'utilisateur est administrateur
@@ -74,7 +74,7 @@ export async function PATCH(
       );
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     // Valider les données
     const body = await request.json();
@@ -144,7 +144,7 @@ export async function PATCH(
 // DELETE - Supprimer un agent
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Vérifier si l'utilisateur est administrateur
@@ -157,7 +157,7 @@ export async function DELETE(
       );
     }
 
-    const { id } = params;
+    const { id } = await params;
 
     // Vérifier si l'agent existe
     const existingAgent = await prisma.agent.findUnique({
